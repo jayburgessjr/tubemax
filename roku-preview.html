@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>TubeMax — Preview</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,300,1,0" rel="stylesheet" />
+<style>
+*, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+:root {
+  --red:#e50914; --g1:#e5e5e5; --g2:#b3b3b3; --g3:#808080; --g4:#4d4d4d;
+  --card:#1a1a1a; --surface:#111; --border:#2a2a2a; --sw:52px;
+}
+html,body { height:100%; overflow:hidden; }
+body { background:#000; color:#fff; font-family:'Inter',sans-serif; display:flex; flex-direction:row; height:100vh; overflow:hidden; }
+.material-symbols-rounded { font-size:20px; line-height:1; user-select:none; }
+
+/* ── SIDEBAR ── */
+.sidebar {
+  width:var(--sw); flex-shrink:0; height:100vh; background:#080808;
+  display:flex; flex-direction:column; align-items:center;
+  padding:14px 0 12px; gap:4px; z-index:50; border-right:1px solid #161616;
+}
+.sb-logo {
+  width:34px; height:34px; background:var(--red); border-radius:7px;
+  display:flex; align-items:center; justify-content:center;
+  font-family:'Bebas Neue',sans-serif; font-size:.75rem; letter-spacing:1px; color:#fff;
+  margin-bottom:10px; flex-shrink:0; box-shadow:0 3px 12px rgba(229,9,20,.45);
+}
+.sb-icon {
+  width:34px; height:34px; border-radius:6px;
+  display:flex; align-items:center; justify-content:center;
+  color:var(--g3); cursor:pointer; transition:all .15s; position:relative;
+}
+.sb-icon:hover { color:#fff; background:rgba(255,255,255,.06); }
+.sb-icon.on { color:#fff; }
+.sb-icon.on::after {
+  content:''; position:absolute; left:0; top:50%; transform:translateY(-50%);
+  width:3px; height:18px; background:var(--red); border-radius:0 2px 2px 0;
+}
+.sb-div { width:24px; height:1px; background:#222; margin:3px 0; }
+.sb-user {
+  margin-top:auto; width:34px; height:34px; border-radius:50%;
+  background:var(--red); display:flex; align-items:center; justify-content:center;
+  font-size:.55rem; font-weight:700; color:#fff; cursor:pointer;
+  border:2px solid #333; flex-shrink:0;
+}
+
+/* ── CONTENT ── */
+.content-area { flex:1; height:100vh; overflow:hidden; position:relative; background:#000; }
+.page { position:absolute; inset:0; display:none; flex-direction:column; background:#000; overflow:hidden; }
+.page.active { display:flex; animation:fadeIn .2s ease; }
+@keyframes fadeIn { from{opacity:0;transform:translateY(3px)} to{opacity:1;transform:none} }
+
+/* ── PAGE HEADER ── */
+.page-hdr { padding:14px 16px 8px; display:flex; align-items:center; gap:10px; flex-shrink:0; }
+.page-hdr-title { font-family:'Bebas Neue',sans-serif; font-size:1.5rem; letter-spacing:2px; color:#fff; }
+.page-hdr-sub { font-size:.58rem; color:var(--g3); margin-top:2px; }
+
+/* ── HERO ── */
+.hero { position:relative; width:100%; height:72%; flex-shrink:0; overflow:hidden; background:#000; transition:height .35s cubic-bezier(.4,0,.2,1), opacity .3s ease; }
+.hero.collapsed { height:0; opacity:0; pointer-events:none; }
+.hero-img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center top; transition:opacity .6s; }
+.hero-img.loading { opacity:0; }
+.hero-lf { position:absolute; inset:0; background:linear-gradient(to right,#000 0%,rgba(0,0,0,.85) 28%,rgba(0,0,0,.2) 55%,transparent 72%); }
+.hero-bf { position:absolute; bottom:0; left:0; right:0; height:60%; background:linear-gradient(to top,#000,transparent); }
+.hero-content { position:absolute; top:0; bottom:0; left:0; width:55%; display:flex; flex-direction:column; justify-content:center; padding:0 0 16px 16px; }
+.hero-sl { display:flex; align-items:center; gap:6px; margin-bottom:5px; }
+.hero-tb { width:14px; height:14px; background:var(--red); display:flex; align-items:center; justify-content:center; font-size:.44rem; font-weight:900; color:#fff; border-radius:1px; }
+.hero-st { font-size:.5rem; font-weight:600; letter-spacing:2px; color:var(--g1); text-transform:uppercase; }
+.hero-title { font-family:'Bebas Neue',sans-serif; font-size:2.4rem; line-height:.95; letter-spacing:1.5px; color:#fff; margin-bottom:7px; text-shadow:0 2px 20px rgba(0,0,0,.9); }
+.hero-desc { font-size:.56rem; color:var(--g2); line-height:1.55; margin-bottom:11px; max-width:320px; display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden; }
+.hero-btns { display:flex; gap:7px; }
+.btn-play { display:flex; align-items:center; gap:5px; padding:6px 14px; background:#fff; color:#000; border:none; border-radius:4px; font-size:.63rem; font-weight:700; cursor:pointer; font-family:'Inter',sans-serif; }
+.btn-play:hover { background:rgba(255,255,255,.85); }
+.btn-info { display:flex; align-items:center; gap:5px; padding:6px 12px; background:rgba(109,109,110,.65); color:#fff; border:none; border-radius:4px; font-size:.63rem; font-weight:600; cursor:pointer; font-family:'Inter',sans-serif; }
+
+/* ── CAT BAR ── */
+.cat-bar { display:flex; gap:8px; padding:10px 16px 9px; flex-shrink:0; overflow-x:auto; scrollbar-width:none; background:#000; border-bottom:1px solid #111; }
+.cat-bar::-webkit-scrollbar { display:none; }
+.cat-pill { padding:7px 18px; border-radius:20px; border:1px solid var(--border); background:transparent; color:var(--g2); font-size:.72rem; font-weight:600; cursor:pointer; white-space:nowrap; transition:all .15s; flex-shrink:0; }
+.cat-pill:hover { border-color:var(--g3); color:#fff; }
+.cat-pill.on { background:var(--red); border-color:var(--red); color:#fff; }
+
+/* ── ROWS ── */
+.rows-area { flex:1; overflow-y:auto; overflow-x:hidden; background:#000; padding:6px 0 12px; scrollbar-width:thin; scrollbar-color:#222 transparent; min-height:0; }
+.rows-area::-webkit-scrollbar { width:3px; }
+.rows-area::-webkit-scrollbar-thumb { background:#222; }
+.row { margin-bottom:18px; }
+.row-label { font-size:.72rem; font-weight:700; color:#fff; padding:0 16px; margin-bottom:8px; display:flex; align-items:center; gap:7px; }
+.ct { display:flex; gap:10px; padding:0 16px 4px; overflow-x:auto; overflow-y:visible; scrollbar-width:none; }
+.ct::-webkit-scrollbar { display:none; }
+
+/* ── CARD ── */
+.card { flex-shrink:0; width:220px; cursor:pointer; transition:transform .22s cubic-bezier(.2,.6,.2,1); position:relative; }
+.card:hover { transform:scale(1.06) translateY(-5px); z-index:5; }
+.card:hover .poster { box-shadow:0 0 0 2.5px var(--red); }
+.poster { width:220px; height:124px; border-radius:5px; overflow:hidden; position:relative; background:var(--card); }
+.poster img { width:100%; height:100%; object-fit:cover; display:block; }
+.card-scrim { position:absolute; bottom:0; left:0; right:0; height:40px; background:linear-gradient(to top,rgba(0,0,0,.7),transparent); pointer-events:none; }
+.clabel { font-size:.58rem; color:var(--g1); padding:6px 2px 0; width:220px; line-height:1.35; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; font-weight:500; }
+.cmeta { font-size:.5rem; color:var(--g3); padding:2px 2px 0; width:220px; }
+
+/* ── SUBS GRID ── */
+.subs-grid { display:grid; grid-template-columns:repeat(5,1fr); gap:18px 14px; padding:8px 16px 20px; }
+.subs-card { cursor:pointer; position:relative; transition:transform .22s cubic-bezier(.2,.6,.2,1); }
+.subs-card:hover { transform:translateY(-4px); z-index:5; }
+.subs-thumb { width:100%; aspect-ratio:16/9; border-radius:7px; overflow:hidden; background:var(--card); position:relative; }
+.subs-thumb img { width:100%; height:100%; object-fit:cover; display:block; }
+.subs-card-meta { padding:7px 2px 0; }
+.subs-card-title { font-size:.58rem; font-weight:600; color:var(--g1); line-height:1.4; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; margin-bottom:3px; }
+.subs-card-channel { font-size:.5rem; color:var(--g3); }
+
+/* ── TRENDING ── */
+.trend-hero { position:relative; width:100%; height:38%; flex-shrink:0; overflow:hidden; background:#0a0a0a; }
+.trend-hero img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center top; transition:opacity .5s; }
+.trend-hero-fade { position:absolute; inset:0; background:linear-gradient(to top,#000 0%,rgba(0,0,0,.5) 40%,transparent 70%),linear-gradient(to right,rgba(0,0,0,.7) 0%,transparent 50%); }
+.trend-hero-label { position:absolute; bottom:16px; left:16px; }
+.thl { font-family:'Bebas Neue',sans-serif; font-size:1.6rem; letter-spacing:1.5px; text-shadow:0 2px 8px rgba(0,0,0,.8); max-width:600px; line-height:1.1; }
+.tcats { display:flex; gap:5px; padding:8px 14px 5px; flex-shrink:0; overflow-x:auto; scrollbar-width:none; }
+.tcats::-webkit-scrollbar { display:none; }
+.tcat { padding:4px 11px; border-radius:20px; border:1px solid var(--border); background:transparent; color:var(--g2); font-size:.58rem; font-weight:600; cursor:pointer; white-space:nowrap; transition:all .15s; }
+.tcat:hover { border-color:var(--g3); color:#fff; }
+.tcat.on { background:var(--red); border-color:var(--red); color:#fff; }
+.page-scroll { flex:1; overflow-y:auto; scrollbar-width:thin; scrollbar-color:#222 transparent; min-height:0; }
+.page-scroll::-webkit-scrollbar { width:3px; }
+.page-scroll::-webkit-scrollbar-thumb { background:#222; }
+
+/* ── SEARCH PAGE ── */
+.search-inner { flex:1; display:flex; gap:18px; padding:0 14px 12px; overflow:hidden; min-height:0; }
+.sleft { width:250px; flex-shrink:0; display:flex; flex-direction:column; gap:8px; }
+.siw { border:2px solid var(--red); border-radius:5px; background:var(--surface); padding:7px 10px; display:flex; align-items:center; gap:6px; }
+.sit { font-size:.66rem; color:#fff; flex:1; background:transparent; border:none; outline:none; font-family:'Inter',sans-serif; }
+.cb-blink { display:inline-block; width:1.5px; height:11px; background:var(--red); animation:blink 1s infinite; vertical-align:middle; margin-left:1px; }
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+.kb { display:flex; flex-direction:column; gap:3px; }
+.kbr { display:flex; gap:3px; }
+.k { flex:1; aspect-ratio:1; max-width:26px; background:var(--card); border-radius:4px; display:flex; align-items:center; justify-content:center; font-size:.52rem; font-weight:600; color:var(--g1); cursor:pointer; transition:all .14s; user-select:none; border:none; }
+.k:hover,.k.foc { background:var(--red); color:#fff; }
+.k.wide { flex:2.5; max-width:none; font-size:.44rem; }
+.k.sk { background:var(--red); color:#fff; flex:1; max-width:none; font-size:.5rem; }
+.sright { flex:1; overflow:hidden; display:flex; flex-direction:column; min-width:0; }
+.rlbl { font-size:.55rem; color:var(--g3); margin-bottom:6px; flex-shrink:0; }
+.rgrid { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; overflow-y:auto; scrollbar-width:none; flex:1; align-content:start; }
+.rgrid::-webkit-scrollbar { display:none; }
+.rc { border-radius:6px; overflow:hidden; cursor:pointer; transition:transform .18s; }
+.rc:hover { transform:scale(1.03); box-shadow:0 0 0 2px var(--red); }
+.rth { width:100%; aspect-ratio:16/9; background:var(--card); overflow:hidden; border-radius:6px; }
+.rth img { width:100%; height:100%; object-fit:cover; display:block; }
+.rtitle { font-size:.5rem; color:var(--g2); padding:5px 2px; line-height:1.3; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+.rch { font-size:.44rem; color:var(--g3); padding:0 2px; }
+
+/* ── WATCHLIST EMPTY ── */
+.wl-empty { display:flex; flex-direction:column; align-items:center; justify-content:center; height:100%; gap:8px; color:var(--g3); }
+.wl-empty .material-symbols-rounded { font-size:34px; color:var(--g4); }
+.wl-empty p { font-size:.62rem; }
+.wl-empty small { font-size:.52rem; color:var(--g4); }
+
+/* ── PLAYER ── */
+#playerModal { position:fixed; inset:0; z-index:200; background:#000; display:none; }
+#playerModal.open { display:block; }
+#ytFrame { position:absolute; inset:0; width:100%; height:100%; border:none; }
+.pl-back {
+  position:absolute; top:14px; left:14px; z-index:20;
+  display:flex; align-items:center; gap:5px;
+  background:rgba(0,0,0,.6); border:1px solid rgba(255,255,255,.15);
+  color:#fff; padding:6px 12px; border-radius:6px;
+  font-size:.6rem; font-weight:600; cursor:pointer;
+  backdrop-filter:blur(6px); font-family:'Inter',sans-serif;
+}
+
+/* ── SKELETON ── */
+.skel { background:linear-gradient(90deg,#1a1a1a 25%,#252525 50%,#1a1a1a 75%); background-size:400% 100%; animation:shimmer 1.4s infinite; border-radius:5px; }
+@keyframes shimmer { 0%{background-position:100% 0} 100%{background-position:-100% 0} }
+
+/* ── BADGE ── */
+.bdg { font-size:.42rem; font-weight:700; letter-spacing:.8px; padding:2px 5px; border-radius:3px; text-transform:uppercase; }
+.blive { background:var(--red); color:#fff; }
+
+/* ── PREVIEW BANNER ── */
+.preview-bar {
+  position:fixed; bottom:0; left:0; right:0; z-index:100;
+  background:rgba(229,9,20,.92); display:flex; align-items:center; justify-content:center;
+  gap:16px; padding:5px 16px; font-size:.56rem; font-weight:600;
+  letter-spacing:.5px; backdrop-filter:blur(4px);
+}
+.preview-bar span { opacity:.75; }
+</style>
+</head>
+<body>
+
+<!-- AUTH OVERLAY -->
+<div id="authOverlay" style="position:fixed;inset:0;z-index:500;background:#000;display:flex;align-items:center;justify-content:center;">
+  <div style="position:relative;z-index:10;display:flex;flex-direction:column;align-items:center;width:248px;padding:26px 22px 20px;background:rgba(8,8,8,.92);border:1px solid rgba(255,255,255,.07);border-radius:16px;box-shadow:0 0 0 1px rgba(229,9,20,.12),0 32px 80px rgba(0,0,0,.95);backdrop-filter:blur(24px);">
+    <div style="width:36px;height:36px;background:var(--red);border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:.7rem;color:#fff;letter-spacing:1px;box-shadow:0 6px 20px rgba(229,9,20,.55);margin-bottom:10px;">TM</div>
+    <div style="font-family:'Bebas Neue',sans-serif;font-size:1.9rem;letter-spacing:6px;color:#fff;margin-bottom:3px;">TUBEMAX</div>
+    <div style="font-size:.48rem;color:var(--g4);letter-spacing:2.5px;text-transform:uppercase;margin-bottom:18px;">YouTube. Refined.</div>
+    <div style="width:100%;display:flex;flex-direction:column;gap:5px;margin-bottom:18px;">
+      <div style="display:flex;align-items:center;gap:7px;font-size:.52rem;color:var(--g3);"><span class="material-symbols-rounded" style="font-size:13px;color:var(--red)">play_circle</span>Netflix-style YouTube experience</div>
+      <div style="display:flex;align-items:center;gap:7px;font-size:.52rem;color:var(--g3);"><span class="material-symbols-rounded" style="font-size:13px;color:var(--red)">subscriptions</span>Your subscriptions, beautifully organized</div>
+      <div style="display:flex;align-items:center;gap:7px;font-size:.52rem;color:var(--g3);"><span class="material-symbols-rounded" style="font-size:13px;color:var(--red)">bookmark</span>Watchlist, history &amp; continue watching</div>
+    </div>
+    <div style="width:100%;display:flex;align-items:center;gap:8px;margin-bottom:14px;">
+      <div style="flex:1;height:1px;background:#1c1c1c;"></div>
+      <span style="font-size:.46rem;color:var(--g4);letter-spacing:.5px;white-space:nowrap;">Sign in to continue</span>
+      <div style="flex:1;height:1px;background:#1c1c1c;"></div>
+    </div>
+    <button onclick="signInWithGoogle()" style="width:100%;display:flex;align-items:center;justify-content:center;gap:8px;padding:9px 16px;background:#fff;color:#1f1f1f;border:none;border-radius:8px;font-size:.65rem;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;margin-bottom:8px;box-shadow:0 2px 8px rgba(0,0,0,.4);">
+      <svg viewBox="0 0 24 24" width="14" height="14"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+      Continue with Google
+    </button>
+    <button onclick="continueAsGuest()" style="width:100%;padding:8px;background:rgba(255,255,255,.04);color:var(--g3);border:1px solid rgba(255,255,255,.08);border-radius:8px;font-size:.6rem;font-family:'Inter',sans-serif;cursor:pointer;margin-bottom:14px;">Browse without signing in</button>
+    <div style="font-size:.44rem;color:var(--g4);text-align:center;line-height:1.6;">By continuing you agree to our <a href="/terms" target="_blank" style="color:var(--g3)">Terms</a> &amp; <a href="/privacy" target="_blank" style="color:var(--g3)">Privacy Policy</a>.</div>
+  </div>
+</div>
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+  <div class="sb-logo">TM</div>
+  <div class="sb-icon on"  onclick="goPage('home',this)"      title="Home">      <span class="material-symbols-rounded">home</span></div>
+  <div class="sb-icon"    onclick="goPage('search',this)"    title="Search">    <span class="material-symbols-rounded">search</span></div>
+  <div class="sb-icon"    onclick="goPage('trending',this)"  title="Trending">  <span class="material-symbols-rounded">trending_up</span></div>
+  <div class="sb-div"></div>
+  <div class="sb-icon"    onclick="goPage('subs',this)"      title="Subscriptions"><span class="material-symbols-rounded">subscriptions</span></div>
+  <div class="sb-icon"    onclick="goPage('history',this)"   title="History">   <span class="material-symbols-rounded">history</span></div>
+  <div class="sb-div"></div>
+  <div class="sb-icon"    onclick="goPage('watchlist',this)" title="Playlists"> <span class="material-symbols-rounded">playlist_play</span></div>
+  <div class="sb-div"></div>
+  <div class="sb-icon"    onclick="goPage('settings',this)"  title="Settings">  <span class="material-symbols-rounded">settings</span></div>
+  <div class="sb-user" id="sbUser" onclick="toggleUserMenu()" title="Account">G
+    <!-- User menu -->
+    <div id="userMenu" style="display:none;position:absolute;bottom:10px;left:58px;background:#1a1a1a;border:1px solid #333;border-radius:8px;padding:10px;width:180px;z-index:200;box-shadow:0 8px 24px rgba(0,0,0,.7);">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid #2a2a2a;">
+        <div id="umAv" style="width:30px;height:30px;border-radius:50%;background:var(--red);display:flex;align-items:center;justify-content:center;font-size:.5rem;font-weight:700;overflow:hidden;flex-shrink:0;">G</div>
+        <div><div id="umName" style="font-size:.6rem;font-weight:600;">Guest</div><div id="umEmail" style="font-size:.5rem;color:var(--g3);">Browsing as guest</div></div>
+      </div>
+      <div onclick="handleSignAction()" style="display:flex;align-items:center;gap:6px;padding:5px 4px;font-size:.58rem;color:var(--red);cursor:pointer;border-radius:4px;border-top:1px solid #2a2a2a;padding-top:8px;margin-top:4px;">
+        <span class="material-symbols-rounded" id="umSignIcon" style="font-size:15px">login</span>
+        <span id="umSignLabel">Sign In with Google</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CONTENT AREA -->
+<div class="content-area">
+
+  <!-- HOME -->
+  <div class="page active" id="page-home">
+    <div class="hero" id="hero">
+      <img class="hero-img loading" id="heroImg" src="" alt="" />
+      <div class="hero-lf"></div>
+      <div class="hero-bf"></div>
+      <div class="hero-content">
+        <div class="hero-sl"><div class="hero-tb">T</div><span class="hero-st">Trending</span></div>
+        <div class="hero-title" id="heroTitle">Loading…</div>
+        <div class="hero-desc" id="heroDesc"></div>
+        <div class="hero-btns">
+          <button class="btn-play" onclick="playHero()"><span class="material-symbols-rounded" style="font-size:15px">play_arrow</span>Play</button>
+          <button class="btn-info"><span class="material-symbols-rounded" style="font-size:15px">info</span>More Info</button>
+        </div>
+      </div>
+    </div>
+    <div class="cat-bar">
+      <div class="cat-pill on"  onclick="catClick(this)">All</div>
+      <div class="cat-pill"    onclick="catClick(this)">Music</div>
+      <div class="cat-pill"    onclick="catClick(this)">Gaming</div>
+      <div class="cat-pill"    onclick="catClick(this)">Sports</div>
+      <div class="cat-pill"    onclick="catClick(this)">News</div>
+      <div class="cat-pill"    onclick="catClick(this)">Tech</div>
+      <div class="cat-pill"    onclick="catClick(this)">Movies</div>
+      <div class="cat-pill"    onclick="catClick(this)">Comedy</div>
+    </div>
+    <div class="rows-area" id="rowsArea"></div>
+  </div>
+
+  <!-- TRENDING -->
+  <div class="page" id="page-trending">
+    <div class="trend-hero">
+      <img id="trendHeroImg" src="" alt="" />
+      <div class="trend-hero-fade"></div>
+      <div class="trend-hero-label">
+        <div style="font-size:.46rem;color:var(--g2);letter-spacing:2px;text-transform:uppercase;margin-bottom:5px;">#1 Trending</div>
+        <div class="thl" id="trendHeroTitle">Trending Worldwide</div>
+        <div style="display:flex;align-items:center;gap:8px;margin-top:10px;">
+          <button onclick="playTrendTop()" style="display:flex;align-items:center;gap:5px;background:#fff;color:#000;border:none;border-radius:4px;padding:6px 14px;font-size:.62rem;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;">
+            <span class="material-symbols-rounded" style="font-size:16px">play_arrow</span>Watch
+          </button>
+          <span class="bdg blive">● Trending Now</span>
+        </div>
+      </div>
+    </div>
+    <div class="tcats">
+      <div class="tcat on"  onclick="trendCat(this,'')">All</div>
+      <div class="tcat"    onclick="trendCat(this,'music 2025')">Music</div>
+      <div class="tcat"    onclick="trendCat(this,'gaming 2025')">Gaming</div>
+      <div class="tcat"    onclick="trendCat(this,'news today')">News</div>
+      <div class="tcat"    onclick="trendCat(this,'sports highlights 2025')">Sports</div>
+      <div class="tcat"    onclick="trendCat(this,'movie trailer 2025')">Film</div>
+      <div class="tcat"    onclick="trendCat(this,'technology 2025')">Tech</div>
+      <div class="tcat"    onclick="trendCat(this,'comedy 2025')">Comedy</div>
+    </div>
+    <div class="page-scroll"><div class="subs-grid" id="trendGrid"></div></div>
+  </div>
+
+  <!-- SEARCH -->
+  <div class="page" id="page-search">
+    <div class="page-hdr">
+      <span class="material-symbols-rounded" style="font-size:20px;color:var(--red)">search</span>
+      <div><div class="page-hdr-title">Search</div><div class="page-hdr-sub">Find anything on YouTube</div></div>
+    </div>
+    <div class="search-inner">
+      <div class="sleft">
+        <div class="siw">
+          <span class="material-symbols-rounded" style="font-size:15px;color:var(--g3)">search</span>
+          <span class="sit" id="searchDisplay"></span><span class="cb-blink"></span>
+        </div>
+        <div class="kb" id="kbRoot"></div>
+      </div>
+      <div class="sright">
+        <div class="rlbl" id="searchLbl">Start typing to search YouTube…</div>
+        <div class="rgrid" id="searchGrid"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SUBSCRIPTIONS -->
+  <div class="page" id="page-subs">
+    <div class="page-hdr">
+      <span class="material-symbols-rounded" style="font-size:20px;color:var(--red)">subscriptions</span>
+      <div><div class="page-hdr-title">Subscriptions</div><div class="page-hdr-sub">Popular YouTube channels</div></div>
+    </div>
+    <div class="page-scroll"><div class="subs-grid" id="subsGrid"></div></div>
+  </div>
+
+  <!-- HISTORY -->
+  <div class="page" id="page-history">
+    <div class="page-hdr">
+      <span class="material-symbols-rounded" style="font-size:20px;color:var(--red)">history</span>
+      <div><div class="page-hdr-title">Watch History</div><div class="page-hdr-sub">Your recently watched videos</div></div>
+    </div>
+    <div class="page-scroll"><div class="subs-grid" id="histGrid"></div></div>
+  </div>
+
+  <!-- WATCHLIST -->
+  <div class="page" id="page-watchlist">
+    <div class="page-hdr">
+      <span class="material-symbols-rounded" style="font-size:20px;color:var(--red)">playlist_play</span>
+      <div><div class="page-hdr-title">My Playlists</div><div class="page-hdr-sub" id="wlSub">Sign in to see your playlists</div></div>
+    </div>
+    <div id="wlEmpty" class="wl-empty">
+      <span class="material-symbols-rounded">playlist_add</span>
+      <p>No playlists found</p>
+      <small>Sign in with Google to see your YouTube playlists</small>
+    </div>
+    <div class="page-scroll" style="display:none;" id="wlScroll">
+      <div class="subs-grid" id="wlGrid"></div>
+    </div>
+  </div>
+
+  <!-- SETTINGS -->
+  <div class="page" id="page-settings">
+    <div class="page-hdr">
+      <span class="material-symbols-rounded" style="font-size:20px;color:var(--red)">settings</span>
+      <div><div class="page-hdr-title">Settings</div><div class="page-hdr-sub">This is a read-only preview</div></div>
+    </div>
+    <div style="padding:20px 16px;font-size:.62rem;color:var(--g3);line-height:1.7;">
+      This preview mirrors the TubeMax web app UI using the embedded API key.<br>
+      To access full settings, open the live app at <strong style="color:var(--g1)">tubemax.revuitysys.com</strong>.
+    </div>
+  </div>
+
+</div><!-- /content-area -->
+
+<!-- PLAYER -->
+<div id="playerModal">
+  <iframe id="ytFrame" allow="autoplay; fullscreen; encrypted-media" allowfullscreen></iframe>
+  <button class="pl-back" onclick="closePlayer()">
+    <span class="material-symbols-rounded">arrow_back</span> Back
+  </button>
+</div>
+
+<div class="preview-bar">
+  <span>TUBEMAX PREVIEW</span> · Live YouTube data · Click any video to play · <span>roku-preview.html</span>
+</div>
+
+<script>
+const API_KEY     = 'AIzaSyDb_DqBsYPpOvH42cfnM0zCg_PxiScvfqM';
+const CLIENT_ID   = '1076747530241-d126rlntlm96i0is6p43kmgdslhsi5l4.apps.googleusercontent.com';
+const SCOPES      = 'https://www.googleapis.com/auth/youtube.readonly https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email';
+const BASE        = 'https://www.googleapis.com/youtube/v3';
+
+// ── State ──────────────────────────
+let currentUser  = null;   // { name, email, picture, accessToken }
+let isGuest      = false;
+let heroVideos   = [], heroIndex = 0, heroTimer = null;
+let trendingVideos = [];
+let searchText   = '';
+let loaded       = { home:false, trending:false, subs:false, history:false, watchlist:false };
+
+// ── Check OAuth token on load ───────
+window.addEventListener('DOMContentLoaded', () => {
+  const hash  = new URLSearchParams(window.location.hash.replace('#',''));
+  const token = hash.get('access_token');
+  if (token) {
+    window.history.replaceState({}, document.title, window.location.pathname);
+    fetchGoogleProfile(token);
+  }
+  // Overlay stays visible until user clicks a button
+});
+
+// ── Auth ────────────────────────────
+function signInWithGoogle() {
+  const params = new URLSearchParams({
+    client_id:    CLIENT_ID,
+    redirect_uri: window.location.origin + window.location.pathname,
+    response_type:'token',
+    scope:        SCOPES,
+    include_granted_scopes:'true',
+  });
+  window.location.href = 'https://accounts.google.com/o/oauth2/v2/auth?' + params.toString();
+}
+
+async function fetchGoogleProfile(token) {
+  try {
+    const res  = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', { headers:{ Authorization:'Bearer '+token } });
+    const prof = await res.json();
+    currentUser = { name:prof.name||'User', email:prof.email||'', picture:prof.picture||'', accessToken:token };
+    onSignedIn();
+  } catch(e) { continueAsGuest(); }
+}
+
+function onSignedIn() {
+  isGuest = false;
+  hideOverlay();
+  updateUserUI();
+  loaded.home = true;
+  loadHome();
+  loadPersonalized();
+}
+
+function continueAsGuest() {
+  isGuest = true;
+  currentUser = null;
+  hideOverlay();
+  updateUserUI();
+  loaded.home = true;
+  loadHome();
+}
+
+function signOut() {
+  currentUser = null;
+  isGuest = false;
+  loaded = { home:false, trending:false, subs:false, history:false, watchlist:false };
+  closeUserMenu();
+  document.getElementById('authOverlay').style.display = 'flex';
+}
+
+function hideOverlay() {
+  document.getElementById('authOverlay').style.display = 'none';
+}
+
+function handleSignAction() {
+  if (currentUser) signOut();
+  else { closeUserMenu(); signInWithGoogle(); }
+}
+
+function updateUserUI() {
+  const name    = currentUser ? currentUser.name : (isGuest ? 'Guest' : '?');
+  const email   = currentUser ? currentUser.email : (isGuest ? 'Browsing as guest' : '');
+  const picture = currentUser?.picture || '';
+  const init    = name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase() || 'G';
+
+  const sbUser = document.getElementById('sbUser');
+  // Keep the menu inside sbUser, just update the visible part
+  const menu = document.getElementById('userMenu');
+  sbUser.innerHTML = '';
+  if (picture) {
+    sbUser.innerHTML = `<img src="${esc(picture)}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;" alt="${esc(name)}" />`;
+  } else {
+    sbUser.textContent = init;
+  }
+  sbUser.appendChild(menu);
+  menu.style.display = 'none';
+
+  document.getElementById('umName').textContent  = name;
+  document.getElementById('umEmail').textContent = email;
+  const umAv = document.getElementById('umAv');
+  if (picture) {
+    umAv.innerHTML = `<img src="${esc(picture)}" style="width:100%;height:100%;object-fit:cover;" />`;
+  } else { umAv.textContent = init; }
+  document.getElementById('umSignLabel').textContent = currentUser ? 'Sign Out' : 'Sign In with Google';
+  document.getElementById('umSignIcon').textContent  = currentUser ? 'logout' : 'login';
+}
+
+function toggleUserMenu() {
+  const m = document.getElementById('userMenu');
+  m.style.display = m.style.display === 'none' ? 'block' : 'none';
+}
+function closeUserMenu() {
+  const m = document.getElementById('userMenu');
+  if (m) m.style.display = 'none';
+}
+document.addEventListener('click', e => {
+  if (!e.target.closest('#sbUser')) closeUserMenu();
+});
+
+// ── Personalized data ───────────────
+async function loadPersonalized() {
+  if (!currentUser) return;
+  const h = { Authorization:'Bearer ' + currentUser.accessToken };
+
+  // Real subscriptions → subs page
+  try {
+    const sd = await fetch(`${BASE}/subscriptions?part=snippet&mine=true&maxResults=20`, { headers:h }).then(r=>r.json());
+    if (sd.items?.length) {
+      const grid = document.getElementById('subsGrid');
+      grid.innerHTML = sd.items.map(i => {
+        const sn = i.snippet; const th = sn.thumbnails?.high?.url || sn.thumbnails?.default?.url || '';
+        return `<div class="subs-card">
+          <div class="subs-thumb">${th ? `<img src="${esc(th)}" alt="" />` : ''}</div>
+          <div class="subs-card-meta">
+            <div class="subs-card-title">${esc(sn.title)}</div>
+            <div class="subs-card-channel">${esc(sn.description?.slice(0,60)||'')}</div>
+          </div></div>`;
+      }).join('');
+      loaded.subs = true;
+    }
+  } catch(e) {}
+
+  // Real liked videos → add home row
+  try {
+    const lk = await fetch(`${BASE}/videos?part=snippet&myRating=like&maxResults=20`, { headers:h }).then(r=>r.json());
+    if (lk.items?.length) {
+      const videos = lk.items.map(i => ({ videoId:i.id, title:i.snippet.title, channel:i.snippet.channelTitle, thumb:i.snippet.thumbnails?.high?.url||'' }));
+      addHomeRow('Liked Videos ♥', videos);
+    }
+  } catch(e) {}
+
+  // Real playlists → watchlist page
+  try {
+    const pl = await fetch(`${BASE}/playlists?part=snippet&mine=true&maxResults=20`, { headers:h }).then(r=>r.json());
+    if (pl.items?.length) {
+      document.getElementById('wlEmpty').style.display  = 'none';
+      document.getElementById('wlScroll').style.display = 'block';
+      document.getElementById('wlSub').textContent = pl.items.length + ' playlists';
+      const grid = document.getElementById('wlGrid');
+      grid.innerHTML = pl.items.map(i => {
+        const sn = i.snippet; const th = sn.thumbnails?.high?.url || sn.thumbnails?.medium?.url || '';
+        return `<div class="subs-card">
+          <div class="subs-thumb">${th ? `<img src="${esc(th)}" alt="" />` : ''}</div>
+          <div class="subs-card-meta">
+            <div class="subs-card-title">${esc(sn.title)}</div>
+            <div class="subs-card-channel">${esc(sn.description?.slice(0,60)||'')}</div>
+          </div></div>`;
+      }).join('');
+      loaded.watchlist = true;
+    }
+  } catch(e) {}
+}
+
+function addHomeRow(label, videos) {
+  const area = document.getElementById('rowsArea');
+  const rowEl = document.createElement('div');
+  rowEl.className = 'row';
+  rowEl.innerHTML = `<div class="row-label">${label}</div>
+    <div class="ct">${videos.map(v => homeCard(v)).join('')}</div>`;
+  area.insertBefore(rowEl, area.firstChild);
+}
+
+// ── Navigation ──────────────────────
+const allIcons = document.querySelectorAll('.sb-icon');
+function goPage(name, iconEl) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + name).classList.add('active');
+  allIcons.forEach(i => i.classList.remove('on'));
+  if (iconEl) iconEl.classList.add('on');
+
+  if (name === 'home'      && !loaded.home)      { loaded.home=true;      loadHome(); }
+  if (name === 'trending'  && !loaded.trending)  { loaded.trending=true;  loadTrending(''); }
+  if (name === 'subs'      && !loaded.subs)      { loaded.subs=true;      loadSubs(); }
+  if (name === 'history'   && !loaded.history)   { loaded.history=true;   loadHistory(); }
+  if (name === 'watchlist' && !loaded.watchlist) { loaded.watchlist=true; loadWatchlist(); }
+}
+
+function loadWatchlist() {
+  if (!currentUser) return; // already shows sign-in empty state
+  // personalized data already loaded in loadPersonalized
+}
+
+// ── Scroll hero on home ─────────────
+const rowsArea = document.getElementById('rowsArea');
+let heroHidden = false;
+rowsArea.addEventListener('scroll', () => {
+  const s = rowsArea.scrollTop > 60;
+  if (s === heroHidden) return;
+  heroHidden = s;
+  document.getElementById('hero').classList.toggle('collapsed', s);
+}, { passive:true });
+
+function catClick(el) {
+  document.querySelectorAll('.cat-pill').forEach(p => p.classList.remove('on'));
+  el.classList.add('on');
+}
+
+// ── API ─────────────────────────────
+async function api(endpoint, params) {
+  const url = new URL('https://www.googleapis.com/youtube/v3/' + endpoint);
+  url.searchParams.set('key', API_KEY);
+  Object.entries(params).forEach(([k,v]) => url.searchParams.set(k,v));
+  const r = await fetch(url);
+  return r.json();
+}
+
+// ── HOME ────────────────────────────
+const rowDefs = [
+  { label:'Trending Now',         type:'trending', query:'' },
+  { label:'Music Videos',         type:'search',   query:'official music video 2025' },
+  { label:'Sports',               type:'search',   query:'sports highlights 2025' },
+  { label:'News',                 type:'search',   query:'world news today' },
+  { label:'Tech & Science',       type:'search',   query:'technology science 2025' },
+  { label:'Movies',               type:'search',   query:'full movie 4K' },
+  { label:'Gaming',               type:'search',   query:'gaming gameplay 2025' },
+  { label:'Comedy',               type:'search',   query:'comedy stand up 2025' },
+  { label:'Short Films & Shorts', type:'search',   query:'short film award winning' },
+];
+
+async function loadHome() {
+  // Hero
+  const hd = await api('videos', { part:'snippet', chart:'mostPopular', maxResults:5, regionCode:'US' });
+  if (hd.items) {
+    heroVideos = hd.items.map(i => ({
+      videoId: i.id, title: i.snippet.title, desc: i.snippet.description,
+      thumb: i.snippet.thumbnails.maxres?.url || i.snippet.thumbnails.high?.url || ''
+    }));
+    showHero(0);
+    heroTimer = setInterval(() => showHero((heroIndex+1) % heroVideos.length), 8000);
+  }
+  // Rows
+  const area = document.getElementById('rowsArea');
+  area.innerHTML = '';
+  rowDefs.forEach(async (def, ri) => {
+    const rowEl = document.createElement('div');
+    rowEl.className = 'row';
+    rowEl.innerHTML = `<div class="row-label">${def.label}</div>
+      <div class="ct" id="ct-${ri}">${skeletonCards(8)}</div>`;
+    area.appendChild(rowEl);
+    try {
+      let data;
+      if (def.type === 'trending') {
+        data = await api('videos', { part:'snippet', chart:'mostPopular', maxResults:50, regionCode:'US' });
+      } else {
+        data = await api('search', { part:'snippet', q:def.query, type:'video', maxResults:50, order:'relevance', videoDuration:'medium' });
+      }
+      const items = parseVideos(data, def.type === 'trending');
+      const ct = document.getElementById('ct-'+ri);
+      if (ct) ct.innerHTML = items.map(v => homeCard(v)).join('');
+    } catch(e) {}
+  });
+}
+
+function showHero(i) {
+  heroIndex = i;
+  const v = heroVideos[i];
+  document.getElementById('heroTitle').textContent = v.title;
+  document.getElementById('heroDesc').textContent  = v.desc.slice(0, 200);
+  const img = document.getElementById('heroImg');
+  img.classList.add('loading');
+  img.onload = () => img.classList.remove('loading');
+  img.src = v.thumb;
+}
+function playHero() {
+  if (heroVideos.length) openPlayer(heroVideos[heroIndex].videoId);
+}
+
+function homeCard(v) {
+  return `<div class="card" onclick="openPlayer('${esc(v.videoId)}')">
+    <div class="poster">
+      ${v.thumb ? `<img src="${esc(v.thumb)}" alt="" loading="lazy" />` : ''}
+      <div class="card-scrim"></div>
+    </div>
+    <div class="clabel">${esc(v.title)}</div>
+    <div class="cmeta">${esc(v.channel)}</div>
+  </div>`;
+}
+
+function skeletonCards(n) {
+  return Array(n).fill(`<div class="card">
+    <div class="poster skel"></div>
+    <div class="skel" style="height:9px;width:85%;margin-top:8px;"></div>
+    <div class="skel" style="height:8px;width:55%;margin-top:5px;"></div>
+  </div>`).join('');
+}
+
+// ── TRENDING ────────────────────────
+let trendTopVideo = null;
+async function loadTrending(query) {
+  const grid = document.getElementById('trendGrid');
+  grid.innerHTML = skeletonSubs(10);
+  try {
+    let data;
+    if (!query) {
+      data = await api('videos', { part:'snippet', chart:'mostPopular', maxResults:20, regionCode:'US' });
+      trendingVideos = parseVideos(data, true);
+    } else {
+      data = await api('search', { part:'snippet', q:query, type:'video', maxResults:20, order:'viewCount' });
+      trendingVideos = parseVideos(data, false);
+    }
+    if (trendingVideos.length) {
+      trendTopVideo = trendingVideos[0];
+      const img = document.getElementById('trendHeroImg');
+      img.src = trendTopVideo.thumb;
+      document.getElementById('trendHeroTitle').textContent = trendTopVideo.title;
+    }
+    grid.innerHTML = trendingVideos.map(v => subsCard(v)).join('');
+  } catch(e) { grid.innerHTML = '<p style="color:#555;padding:16px;font-size:.6rem;">Failed to load.</p>'; }
+}
+function playTrendTop() { if (trendTopVideo) openPlayer(trendTopVideo.videoId); }
+function trendCat(el, q) {
+  document.querySelectorAll('.tcat').forEach(t => t.classList.remove('on'));
+  el.classList.add('on');
+  loaded.trending = false;
+  loadTrending(q);
+}
+
+// ── SUBS ────────────────────────────
+async function loadSubs() {
+  const grid = document.getElementById('subsGrid');
+  grid.innerHTML = skeletonSubs(10);
+  try {
+    const data = await api('search', { part:'snippet', q:'top youtube channels 2025', type:'video', maxResults:20, order:'viewCount' });
+    const items = parseVideos(data, false);
+    grid.innerHTML = items.map(v => subsCard(v)).join('');
+  } catch(e) {}
+}
+
+// ── HISTORY ─────────────────────────
+async function loadHistory() {
+  const grid = document.getElementById('histGrid');
+  grid.innerHTML = skeletonSubs(10);
+  try {
+    const data = await api('videos', { part:'snippet', chart:'mostPopular', maxResults:20, regionCode:'US' });
+    const items = parseVideos(data, true);
+    grid.innerHTML = items.map(v => subsCard(v)).join('');
+  } catch(e) {}
+}
+
+function subsCard(v) {
+  return `<div class="subs-card" onclick="openPlayer('${esc(v.videoId)}')">
+    <div class="subs-thumb">${v.thumb ? `<img src="${esc(v.thumb)}" alt="" loading="lazy" />` : ''}</div>
+    <div class="subs-card-meta">
+      <div class="subs-card-title">${esc(v.title)}</div>
+      <div class="subs-card-channel">${esc(v.channel)}</div>
+    </div>
+  </div>`;
+}
+
+function skeletonSubs(n) {
+  return Array(n).fill(`<div class="subs-card">
+    <div class="subs-thumb skel"></div>
+    <div class="skel" style="height:9px;width:90%;margin-top:8px;border-radius:3px;"></div>
+    <div class="skel" style="height:8px;width:60%;margin-top:5px;border-radius:3px;"></div>
+  </div>`).join('');
+}
+
+// ── SEARCH ──────────────────────────
+const keyRows = [
+  ['1','2','3','4','5','6','7','8','9','0'],
+  ['Q','W','E','R','T','Y','U','I','O','P'],
+  ['A','S','D','F','G','H','J','K','L','⌫'],
+  ['Z','X','C','V','B','N','M','SPACE','SEARCH'],
+];
+function buildKeyboard() {
+  const root = document.getElementById('kbRoot');
+  root.innerHTML = keyRows.map(row =>
+    `<div class="kbr">${row.map(k => {
+      const cls = (k==='SPACE'||k==='SEARCH') ? 'k wide' + (k==='SEARCH' ? ' sk':'') : 'k';
+      return `<button class="${cls}" onclick="keyPress('${k}')">${k==='⌫' ? '⌫' : k}</button>`;
+    }).join('')}</div>`
+  ).join('');
+}
+function keyPress(k) {
+  if (k === '⌫') { searchText = searchText.slice(0,-1); }
+  else if (k === 'SPACE') { searchText += ' '; }
+  else if (k === 'SEARCH') { doSearch(); return; }
+  else { searchText += k; }
+  document.getElementById('searchDisplay').textContent = searchText;
+}
+async function doSearch() {
+  if (!searchText.trim()) return;
+  const grid = document.getElementById('searchGrid');
+  const lbl  = document.getElementById('searchLbl');
+  lbl.textContent = 'Searching…';
+  grid.innerHTML = '';
+  try {
+    const data = await api('search', { part:'snippet', q:searchText, type:'video', maxResults:12, order:'relevance' });
+    const items = parseVideos(data, false);
+    lbl.textContent = items.length + ' results for "' + searchText + '"';
+    grid.innerHTML = items.map(v => `
+      <div class="rc" onclick="openPlayer('${esc(v.videoId)}')">
+        <div class="rth">${v.thumb ? `<img src="${esc(v.thumb)}" alt="" loading="lazy" />` : ''}</div>
+        <div class="rtitle">${esc(v.title)}</div>
+        <div class="rch">${esc(v.channel)}</div>
+      </div>`).join('');
+  } catch(e) { lbl.textContent = 'Search failed.'; }
+}
+
+// ── PARSE ────────────────────────────
+function parseVideos(data, isTrending) {
+  return (data.items||[]).map(item => {
+    const videoId = isTrending ? item.id : item.id?.videoId;
+    if (!videoId) return null;
+    const sn = item.snippet;
+    return { videoId, title:sn.title, channel:sn.channelTitle,
+      thumb:sn.thumbnails?.high?.url || sn.thumbnails?.medium?.url || '' };
+  }).filter(Boolean);
+}
+
+// ── PLAYER ──────────────────────────
+function openPlayer(videoId) {
+  document.getElementById('ytFrame').src = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0&modestbranding=1`;
+  document.getElementById('playerModal').classList.add('open');
+}
+function closePlayer() {
+  document.getElementById('ytFrame').src = '';
+  document.getElementById('playerModal').classList.remove('open');
+}
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closePlayer(); });
+
+// ── UTIL ────────────────────────────
+function esc(s) {
+  return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ── INIT ────────────────────────────
+buildKeyboard();
+loaded.home = true;
+loadHome();
+</script>
+</body>
+</html>
