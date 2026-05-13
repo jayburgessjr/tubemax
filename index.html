@@ -278,32 +278,164 @@ body.light .subs-card-channel { color:#777; }
 .rtitle { font-size:.43rem; color:var(--g2); padding:3px 1px; line-height:1.25; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
 
 /* ══════════════════════════════
-   PLAYER PAGE
+   FULLSCREEN PLAYER OVERLAY
 ══════════════════════════════ */
-.player-wrap { position:relative; width:100%; height:100%; }
-.pbg { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; background:#000; }
-.pbg img { width:100%; height:100%; object-fit:cover; opacity:.32; }
-.pci { position:absolute; width:48px; height:48px; border-radius:50%; background:rgba(229,9,20,.2); border:2px solid rgba(229,9,20,.55); display:flex; align-items:center; justify-content:center; animation:pulse 2s infinite; }
-.pci .material-symbols-rounded { font-size:22px; color:#fff; }
-@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
-.ptr { position:absolute; top:42px; right:22px; display:flex; flex-direction:column; gap:6px; }
-.pb { width:28px; height:28px; border-radius:50%; background:rgba(255,255,255,.07); border:1px solid rgba(255,255,255,.1); display:flex; align-items:center; justify-content:center; font-size:.5rem; color:var(--g2); cursor:pointer; }
-.pb:hover { background:rgba(255,255,255,.14); color:#fff; }
-.posd { position:absolute; bottom:0; left:0; right:0; padding:26px 22px 12px; background:linear-gradient(to top,rgba(0,0,0,.97),transparent); }
-.ptitle { font-size:.72rem; font-weight:600; margin-bottom:6px; }
-.ptrack { width:100%; height:3px; background:rgba(255,255,255,.2); border-radius:2px; }
-.pfill { width:38%; height:100%; background:var(--red); border-radius:2px; position:relative; }
-.pfill::after { content:''; position:absolute; right:-5px; top:50%; transform:translateY(-50%); width:9px; height:9px; background:var(--red); border-radius:50%; }
-.trow { display:flex; justify-content:space-between; margin-top:4px; font-size:.5rem; color:var(--g2); }
-.pctrls { display:flex; align-items:center; justify-content:center; gap:18px; margin-top:5px; }
-.ctrl { color:var(--g1); cursor:pointer; background:none; border:none; transition:all .14s; display:flex; align-items:center; }
-.ctrl .material-symbols-rounded { font-size:20px; }
-.ctrl:hover { color:#fff; transform:scale(1.08); }
-.ctrl.main { width:34px; height:34px; border-radius:50%; background:#fff; color:#000; display:flex; align-items:center; justify-content:center; }
-.ctrl.main .material-symbols-rounded { font-size:18px; color:#000; }
-.back-btn { position:absolute; top:12px; left:12px; display:flex; align-items:center; gap:4px; background:rgba(0,0,0,.5); border:1px solid #333; color:var(--g2); padding:4px 9px; border-radius:5px; font-size:.55rem; cursor:pointer; backdrop-filter:blur(4px); }
-.back-btn .material-symbols-rounded { font-size:13px; }
-.back-btn:hover { color:#fff; border-color:var(--g3); }
+#playerModal {
+  position:fixed; inset:0; z-index:150; background:#000;
+  display:none;
+}
+#playerModal.open { display:block; }
+#ytFrame {
+  position:absolute; inset:0; width:100%; height:100%; border:none;
+}
+
+/* Back button — always visible */
+.pl-back {
+  position:absolute; top:14px; left:14px; z-index:20;
+  display:flex; align-items:center; gap:5px;
+  background:rgba(0,0,0,.55); border:1px solid rgba(255,255,255,.15);
+  color:#fff; padding:6px 12px; border-radius:6px;
+  font-size:.6rem; font-weight:600; cursor:pointer;
+  backdrop-filter:blur(6px); transition:background .15s;
+}
+.pl-back:hover { background:rgba(0,0,0,.8); }
+.pl-back .material-symbols-rounded { font-size:16px; }
+
+/* Hint bar — keyboard hints */
+.pl-hints {
+  position:absolute; bottom:0; left:0; right:0; z-index:20;
+  display:flex; justify-content:center; gap:20px; padding:10px 0 8px;
+  background:linear-gradient(to top, rgba(0,0,0,.8), transparent);
+  font-size:.52rem; color:rgba(255,255,255,.5);
+  transition:opacity .3s;
+}
+.pl-hints.hide { opacity:0; pointer-events:none; }
+.pl-hint-key { display:inline-flex; align-items:center; gap:4px; }
+.pl-hint-key kbd {
+  background:rgba(255,255,255,.12); border:1px solid rgba(255,255,255,.2);
+  border-radius:3px; padding:1px 5px; font-size:.48rem; font-family:inherit;
+}
+
+/* OSD overlay (Enter) */
+.pl-osd {
+  position:absolute; inset:0; z-index:18;
+  display:flex; flex-direction:column; justify-content:flex-end;
+  pointer-events:none; opacity:0; transition:opacity .25s;
+}
+.pl-osd.visible { opacity:1; pointer-events:auto; }
+.pl-osd-inner {
+  padding:40px 28px 18px;
+  background:linear-gradient(to top, rgba(0,0,0,.96) 0%, transparent 100%);
+}
+.pl-osd-title { font-size:.85rem; font-weight:600; color:#fff; margin-bottom:10px; }
+.pl-progress-bar {
+  width:100%; height:4px; background:rgba(255,255,255,.25);
+  border-radius:2px; cursor:pointer; position:relative;
+}
+.pl-progress-fill {
+  height:100%; background:var(--red); border-radius:2px;
+  position:relative; transition:width .5s linear;
+}
+.pl-progress-fill::after {
+  content:''; position:absolute; right:-6px; top:50%;
+  transform:translateY(-50%); width:12px; height:12px;
+  background:var(--red); border-radius:50%; box-shadow:0 0 6px rgba(229,9,20,.6);
+}
+.pl-time-row { display:flex; justify-content:space-between; margin-top:5px; font-size:.5rem; color:rgba(255,255,255,.55); }
+
+/* Right sidebar — Up Next */
+.pl-sidebar-right {
+  position:absolute; top:0; right:0; bottom:0; z-index:19;
+  width:340px; background:rgba(10,10,10,.97);
+  border-left:1px solid #1f1f1f;
+  transform:translateX(100%); transition:transform .3s cubic-bezier(.4,0,.2,1);
+  display:flex; flex-direction:column; overflow:hidden;
+}
+.pl-sidebar-right.open { transform:translateX(0); }
+
+/* Bottom panel — Details */
+.pl-panel-bottom {
+  position:absolute; left:0; right:0; bottom:0; z-index:19;
+  background:rgba(10,10,10,.97); border-top:1px solid #1f1f1f;
+  max-height:55%; transform:translateY(100%);
+  transition:transform .3s cubic-bezier(.4,0,.2,1);
+  overflow-y:auto; scrollbar-width:thin; scrollbar-color:#222 transparent;
+}
+.pl-panel-bottom.open { transform:translateY(0); }
+
+/* Left sidebar — Comments */
+.pl-sidebar-left {
+  position:absolute; top:0; left:0; bottom:0; z-index:19;
+  width:340px; background:rgba(10,10,10,.97);
+  border-right:1px solid #1f1f1f;
+  transform:translateX(-100%); transition:transform .3s cubic-bezier(.4,0,.2,1);
+  display:flex; flex-direction:column; overflow:hidden;
+}
+.pl-sidebar-left.open { transform:translateX(0); }
+
+/* Shared sidebar header */
+.pl-side-hdr {
+  padding:14px 16px 10px; display:flex; align-items:center;
+  justify-content:space-between; flex-shrink:0;
+  border-bottom:1px solid #1f1f1f;
+}
+.pl-side-hdr-title {
+  font-size:.72rem; font-weight:700; color:#fff; display:flex; align-items:center; gap:6px;
+}
+.pl-side-hdr-title .material-symbols-rounded { font-size:16px; color:var(--red); }
+.pl-side-close {
+  width:26px; height:26px; border-radius:50%; background:rgba(255,255,255,.08);
+  border:none; color:var(--g3); cursor:pointer; display:flex;
+  align-items:center; justify-content:center; flex-shrink:0;
+}
+.pl-side-close:hover { color:#fff; background:rgba(255,255,255,.15); }
+.pl-side-close .material-symbols-rounded { font-size:14px; }
+.pl-side-body { flex:1; overflow-y:auto; padding:10px 0; scrollbar-width:thin; scrollbar-color:#222 transparent; }
+.pl-side-body::-webkit-scrollbar { width:3px; }
+.pl-side-body::-webkit-scrollbar-thumb { background:#222; }
+
+/* Up Next cards */
+.pl-un-card {
+  display:flex; gap:10px; padding:8px 14px; cursor:pointer; transition:background .15s;
+}
+.pl-un-card:hover { background:rgba(255,255,255,.06); }
+.pl-un-thumb {
+  width:110px; height:62px; border-radius:4px; overflow:hidden;
+  background:#1a1a1a; flex-shrink:0;
+}
+.pl-un-thumb img { width:100%; height:100%; object-fit:cover; display:block; }
+.pl-un-info { flex:1; min-width:0; padding-top:2px; }
+.pl-un-title { font-size:.58rem; font-weight:500; color:#e5e5e5; line-height:1.35; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; margin-bottom:4px; }
+.pl-un-ch { font-size:.5rem; color:var(--g3); }
+
+/* Details panel content */
+.pl-det-inner { padding:16px 20px 24px; }
+.pl-det-title { font-size:.85rem; font-weight:700; color:#fff; line-height:1.3; margin-bottom:8px; }
+.pl-det-meta { display:flex; align-items:center; gap:8px; margin-bottom:14px; font-size:.56rem; color:var(--g3); flex-wrap:wrap; }
+.pl-det-ch-row { display:flex; align-items:center; gap:10px; margin-bottom:14px; }
+.pl-det-ch-av { width:36px; height:36px; border-radius:50%; background:var(--red); display:flex; align-items:center; justify-content:center; font-size:.52rem; font-weight:700; flex-shrink:0; }
+.pl-det-ch-name { font-size:.65rem; font-weight:600; color:#fff; }
+.pl-det-ch-subs { font-size:.5rem; color:var(--g3); }
+.pl-det-acts { display:flex; gap:8px; margin-bottom:14px; flex-wrap:wrap; }
+.pl-det-act {
+  display:flex; align-items:center; gap:5px; padding:6px 12px;
+  background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.1);
+  border-radius:20px; color:var(--g1); font-size:.57rem; font-weight:500;
+  cursor:pointer; transition:all .15s;
+}
+.pl-det-act:hover { background:rgba(255,255,255,.15); color:#fff; }
+.pl-det-act .material-symbols-rounded { font-size:15px; }
+.pl-det-desc { font-size:.58rem; color:var(--g2); line-height:1.6; white-space:pre-wrap; }
+
+/* Comment items */
+.pl-comment {
+  padding:10px 14px; border-bottom:1px solid #151515;
+}
+.pl-comment-hdr { display:flex; align-items:center; gap:8px; margin-bottom:5px; }
+.pl-comment-av { width:28px; height:28px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:.44rem; font-weight:700; flex-shrink:0; }
+.pl-comment-name { font-size:.55rem; font-weight:600; color:var(--g1); }
+.pl-comment-time { font-size:.48rem; color:var(--g3); margin-left:auto; }
+.pl-comment-text { font-size:.56rem; color:var(--g2); line-height:1.5; padding-left:36px; }
 
 /* ══════════════════════════════
    AUTH OVERLAY — full viewport
@@ -830,31 +962,8 @@ body.light .wl-empty { color:#888; }
       </div>
     </div>
 
-    <!-- PLAYER -->
-    <div class="page" id="page-player">
-      <div class="player-wrap">
-        <div class="pbg">
-          <img id="playerThumb" src="" alt="">
-          <div class="pci"><span class="material-symbols-rounded">play_arrow</span></div>
-        </div>
-        <div class="ptr">
-          <div class="pb">HD</div><div class="pb">CC</div><div class="pb">1×</div>
-        </div>
-        <div class="posd">
-          <div class="ptitle" id="playerTitle">Select a video to play</div>
-          <div class="ptrack"><div class="pfill"></div></div>
-          <div class="trow"><span>0:00</span><span>0:00</span></div>
-          <div class="pctrls">
-            <button class="ctrl"><span class="material-symbols-rounded">skip_previous</span></button>
-            <button class="ctrl"><span class="material-symbols-rounded">fast_rewind</span></button>
-            <button class="ctrl main"><span class="material-symbols-rounded">pause</span></button>
-            <button class="ctrl"><span class="material-symbols-rounded">fast_forward</span></button>
-            <button class="ctrl"><span class="material-symbols-rounded">skip_next</span></button>
-          </div>
-        </div>
-        <button class="back-btn" id="backBtn"><span class="material-symbols-rounded">arrow_back</span>Back</button>
-      </div>
-    </div>
+    <!-- keep page-player as empty placeholder (navigation compat) -->
+    <div class="page" id="page-player" style="display:none!important;"></div>
 
     <!-- SETTINGS -->
     <div class="page" id="page-settings">
@@ -1013,8 +1122,6 @@ function goPage(id) {
     t.classList.toggle('on', t.dataset.page === id);
   });
 
-  // Player back button target
-  document.getElementById('backBtn').onclick = () => goPage(prevPage);
 }
 
 // Wire sidebar icons
@@ -1402,6 +1509,10 @@ function openDetail(v) {
 function goPlay() {
   if (currentDetailVideo) openPlayer(currentDetailVideo);
 }
+// Also allow clicking the hero play button to go straight to player
+document.getElementById('heroPlayBtn').addEventListener('click', () => {
+  if (heroVideos && heroVideos[currentHeroIndex]) openPlayer(heroVideos[currentHeroIndex]);
+});
 
 function buildUpNext(vids) {
   const list = document.getElementById('unList');
@@ -1428,13 +1539,185 @@ function toggleDesc() {
 }
 
 // ════════════════════════════════
-// PLAYER
+// FULLSCREEN PLAYER
 // ════════════════════════════════
+let plCurrentVideo = null;
+let plHintsTimer   = null;
+
 function openPlayer(v) {
-  document.getElementById('playerTitle').textContent = v.title || 'Now Playing';
-  document.getElementById('playerThumb').src = th(v);
+  plCurrentVideo = v;
+
+  // Load YouTube iframe
+  const frame = document.getElementById('ytFrame');
+  frame.src = `https://www.youtube.com/embed/${v.videoId}?autoplay=1&rel=0&modestbranding=1&iv_load_policy=3`;
+
+  // OSD title & reset progress
+  document.getElementById('plOSDTitle').textContent = v.title || '';
+  document.getElementById('plProgressFill').style.width = '0%';
+  document.getElementById('plTimeNow').textContent = '0:00';
+  document.getElementById('plTimeTot').textContent  = '–:––';
+
+  // Fill Up Next list
+  buildPlUpNext(v);
+
+  // Fill Details panel
+  buildPlDetails(v);
+
+  // Fill Comments panel
+  buildPlComments(v);
+
+  // Open modal
+  const modal = document.getElementById('playerModal');
+  modal.classList.add('open');
+
+  // Show hints, auto-hide after 4s
+  showPlHints();
+
+  // Keyboard listener
+  document.addEventListener('keydown', plKeyHandler);
+
+  // Progress tracking
   startProgressTracking(v);
-  goPage('player');
+}
+
+function closePlayer() {
+  const modal = document.getElementById('playerModal');
+  modal.classList.remove('open');
+
+  // Stop iframe
+  document.getElementById('ytFrame').src = '';
+
+  // Close all panels
+  document.getElementById('plUpNext').classList.remove('open');
+  document.getElementById('plDetails').classList.remove('open');
+  document.getElementById('plComments').classList.remove('open');
+  document.getElementById('plOSD').classList.remove('visible');
+
+  document.removeEventListener('keydown', plKeyHandler);
+  stopProgressTracking();
+  if (plHintsTimer) clearTimeout(plHintsTimer);
+}
+
+function plKeyHandler(e) {
+  switch(e.key) {
+    case 'Escape':    e.preventDefault(); closePlayer(); break;
+    case 'ArrowRight':e.preventDefault(); togglePanelRight(); break;
+    case 'ArrowLeft': e.preventDefault(); togglePanelLeft();  break;
+    case 'ArrowDown': e.preventDefault(); togglePanelBottom(); break;
+    case 'ArrowUp':   e.preventDefault(); togglePlOSD();      break;
+    case 'Enter': case ' ': e.preventDefault(); togglePlOSD(); break;
+  }
+}
+
+function showPlHints() {
+  const h = document.getElementById('plHints');
+  h.classList.remove('hide');
+  if (plHintsTimer) clearTimeout(plHintsTimer);
+  plHintsTimer = setTimeout(() => h.classList.add('hide'), 4000);
+}
+
+function togglePlOSD() {
+  document.getElementById('plOSD').classList.toggle('visible');
+  showPlHints();
+}
+function togglePanelRight() {
+  document.getElementById('plUpNext').classList.toggle('open');
+  // Close others
+  document.getElementById('plComments').classList.remove('open');
+  document.getElementById('plDetails').classList.remove('open');
+  showPlHints();
+}
+function togglePanelLeft() {
+  document.getElementById('plComments').classList.toggle('open');
+  document.getElementById('plUpNext').classList.remove('open');
+  document.getElementById('plDetails').classList.remove('open');
+  showPlHints();
+}
+function togglePanelBottom() {
+  document.getElementById('plDetails').classList.toggle('open');
+  showPlHints();
+}
+
+function buildPlUpNext(current) {
+  const list = document.getElementById('plUpNextList');
+  list.innerHTML = '';
+  const vids = cachedTrending.filter(v => v.videoId !== current.videoId).slice(0, 20);
+  vids.forEach(v => {
+    const c = document.createElement('div');
+    c.className = 'pl-un-card';
+    c.innerHTML = `
+      <div class="pl-un-thumb"><img src="${v.thumbH || v.thumb}" alt="" loading="lazy" onerror="this.parentNode.style.background='#1a1a1a'"></div>
+      <div class="pl-un-info">
+        <div class="pl-un-title">${esc(v.title)}</div>
+        <div class="pl-un-ch">${esc(v.channel)}</div>
+      </div>`;
+    c.onclick = () => { openPlayer(v); document.getElementById('plUpNext').classList.remove('open'); };
+    list.appendChild(c);
+  });
+}
+
+function buildPlDetails(v) {
+  const inner = document.getElementById('plDetailsInner');
+  const init  = (v.channel || 'CH').split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
+  const views = (Math.floor(Math.random() * 900) + 100) + 'K views';
+  const ago   = ['2 hours ago', '1 day ago', '3 days ago', '1 week ago'][Math.floor(Math.random() * 4)];
+  inner.innerHTML = `
+    <div class="pl-det-title">${esc(v.title)}</div>
+    <div class="pl-det-meta">
+      <span>${views}</span><span>·</span><span>${ago}</span>
+      <span class="bdg bcnt">HD</span>
+    </div>
+    <div class="pl-det-ch-row">
+      <div class="pl-det-ch-av" style="background:var(--red)">${init}</div>
+      <div>
+        <div class="pl-det-ch-name">${esc(v.channel)}</div>
+        <div class="pl-det-ch-subs">${(Math.floor(Math.random()*9)+1)}.${Math.floor(Math.random()*9)}M subscribers</div>
+      </div>
+    </div>
+    <div class="pl-det-acts">
+      <button class="pl-det-act" onclick="saveToWatchlist()"><span class="material-symbols-rounded">bookmark_add</span>Save</button>
+      <button class="pl-det-act"><span class="material-symbols-rounded">thumb_up</span>Like</button>
+      <button class="pl-det-act"><span class="material-symbols-rounded">share</span>Share</button>
+    </div>
+    <div class="pl-det-desc">${esc(v.desc || 'No description available.')}</div>`;
+}
+
+function buildPlComments(v) {
+  const list = document.getElementById('plCommentsList');
+  const colors = ['#e50914','#0070d1','#46d369','#9147ff','#ff6b35','#f5a623','#1db954'];
+  const sampleComments = [
+    {name:'Alex M.',     time:'2 hours ago',  text:'This is incredible! 🔥'},
+    {name:'Sarah K.',    time:'4 hours ago',  text:'Been waiting for this one. Absolutely worth it.'},
+    {name:'Jordan T.',   time:'5 hours ago',  text:'The production quality is amazing 👏'},
+    {name:'Chris W.',    time:'1 day ago',    text:'Just found this channel and I\'m hooked.'},
+    {name:'Maya R.',     time:'1 day ago',    text:'Can\'t stop watching this on repeat.'},
+    {name:'Daniel L.',   time:'2 days ago',   text:'This deserves way more views!'},
+    {name:'Priya S.',    time:'2 days ago',   text:'Top tier content as always.'},
+    {name:'Marcus B.',   time:'3 days ago',   text:'The best one yet.'},
+    {name:'Emma N.',     time:'3 days ago',   text:'Showing this to everyone I know.'},
+    {name:'Tyler H.',    time:'1 week ago',   text:'Absolute banger from start to finish.'},
+  ];
+  list.innerHTML = '';
+  sampleComments.forEach((c, i) => {
+    const initials = c.name.split(' ').map(w => w[0]).join('');
+    const div = document.createElement('div');
+    div.className = 'pl-comment';
+    div.innerHTML = `
+      <div class="pl-comment-hdr">
+        <div class="pl-comment-av" style="background:${colors[i % colors.length]}">${initials}</div>
+        <div class="pl-comment-name">${esc(c.name)}</div>
+        <div class="pl-comment-time">${c.time}</div>
+      </div>
+      <div class="pl-comment-text">${esc(c.text)}</div>`;
+    list.appendChild(div);
+  });
+}
+
+function plSeekClick(e) {
+  const bar   = e.currentTarget;
+  const pct   = Math.max(0, Math.min(100, (e.offsetX / bar.offsetWidth) * 100));
+  document.getElementById('plProgressFill').style.width = pct + '%';
+  if (playerCurrentVideo) recordWatched(playerCurrentVideo, pct);
 }
 
 // ════════════════════════════════
@@ -1827,15 +2110,26 @@ function startProgressTracking(v) {
   const existing = getCWProgress().find(i => i.videoId === v.videoId);
   playerProgressPct = existing ? existing.pct : 5;
   recordWatched(v, playerProgressPct);
-  // Update pfill visual to match saved progress
-  const fill = document.querySelector('.pfill');
+  const fill = document.getElementById('plProgressFill');
   if (fill) fill.style.width = playerProgressPct + '%';
   playerProgressInterval = setInterval(() => {
-    playerProgressPct = Math.min(playerProgressPct + 0.6, 99);
+    playerProgressPct = Math.min(playerProgressPct + 0.4, 99);
     recordWatched(playerCurrentVideo, playerProgressPct);
-    const f = document.querySelector('.pfill');
+    const f = document.getElementById('plProgressFill');
     if (f) f.style.width = playerProgressPct + '%';
+    // Update time display (estimate: assume avg 8 min video)
+    const elapsed = Math.round((playerProgressPct / 100) * 480);
+    const total   = 480;
+    const tnow = document.getElementById('plTimeNow');
+    const ttot  = document.getElementById('plTimeTot');
+    if (tnow) tnow.textContent = fmtTime(elapsed);
+    if (ttot) ttot.textContent = fmtTime(total);
   }, 2000);
+}
+
+function fmtTime(sec) {
+  const m = Math.floor(sec / 60), s = sec % 60;
+  return m + ':' + String(s).padStart(2, '0');
 }
 
 function stopProgressTracking() {
@@ -1941,5 +2235,65 @@ updateAuthUI();
 
 document.getElementById('apiKeyInput').addEventListener('keydown', e => { if(e.key==='Enter') loadAll(); });
 </script>
+
+<!-- ════ FULLSCREEN PLAYER MODAL ════ -->
+<div id="playerModal">
+
+  <!-- YouTube iframe -->
+  <iframe id="ytFrame" src="" allow="autoplay; encrypted-media; fullscreen" allowfullscreen></iframe>
+
+  <!-- Back button -->
+  <button class="pl-back" onclick="closePlayer()">
+    <span class="material-symbols-rounded">arrow_back</span>Back
+  </button>
+
+  <!-- Keyboard hints (auto-hide after a few seconds) -->
+  <div class="pl-hints" id="plHints">
+    <span class="pl-hint-key"><kbd>Enter</kbd> Progress</span>
+    <span class="pl-hint-key"><kbd>→</kbd> Up Next</span>
+    <span class="pl-hint-key"><kbd>↓</kbd> Details</span>
+    <span class="pl-hint-key"><kbd>←</kbd> Comments</span>
+    <span class="pl-hint-key"><kbd>Esc</kbd> Close</span>
+  </div>
+
+  <!-- OSD (Enter) -->
+  <div class="pl-osd" id="plOSD">
+    <div class="pl-osd-inner">
+      <div class="pl-osd-title" id="plOSDTitle"></div>
+      <div class="pl-progress-bar" onclick="plSeekClick(event)">
+        <div class="pl-progress-fill" id="plProgressFill"></div>
+      </div>
+      <div class="pl-time-row">
+        <span id="plTimeNow">0:00</span>
+        <span id="plTimeTot">–:––</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Right sidebar — Up Next (→) -->
+  <div class="pl-sidebar-right" id="plUpNext">
+    <div class="pl-side-hdr">
+      <div class="pl-side-hdr-title"><span class="material-symbols-rounded">queue_play_next</span>Up Next</div>
+      <button class="pl-side-close" onclick="togglePanelRight()"><span class="material-symbols-rounded">close</span></button>
+    </div>
+    <div class="pl-side-body" id="plUpNextList"></div>
+  </div>
+
+  <!-- Bottom panel — Details (↓) -->
+  <div class="pl-panel-bottom" id="plDetails">
+    <div class="pl-det-inner" id="plDetailsInner"></div>
+  </div>
+
+  <!-- Left sidebar — Comments (←) -->
+  <div class="pl-sidebar-left" id="plComments">
+    <div class="pl-side-hdr">
+      <div class="pl-side-hdr-title"><span class="material-symbols-rounded">chat_bubble</span>Comments</div>
+      <button class="pl-side-close" onclick="togglePanelLeft()"><span class="material-symbols-rounded">close</span></button>
+    </div>
+    <div class="pl-side-body" id="plCommentsList"></div>
+  </div>
+
+</div>
+
 </body>
 </html>
