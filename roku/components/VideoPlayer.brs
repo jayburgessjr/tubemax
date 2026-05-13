@@ -73,11 +73,11 @@ sub onVideoStateChange()
 
     if state = "playing"
         m.isPlaying = true
-        if btnPlay <> invalid then btnPlay.text = "⏸"
+        if btnPlay <> invalid then btnPlay.text = "Pause"
         m.progressTimer.control = "start"
     else if state = "paused"
         m.isPlaying = false
-        if btnPlay <> invalid then btnPlay.text = "▶"
+        if btnPlay <> invalid then btnPlay.text = " Play"
     else if state = "finished"
         m.top.playerClosed = true
     else if state = "error"

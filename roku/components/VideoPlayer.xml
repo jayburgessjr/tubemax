@@ -96,10 +96,16 @@
       />
 
       <!-- Control Buttons Row -->
-      <Group id="controls" translation="[860, 1030]">
-        <Label id="btnRewind"  text="⏮"  translation="[-100, 0]" color="0xFFFFFFFF" font="font:LargeBoldSystemFont" />
-        <Label id="btnPlay"    text="⏸"  translation="[0,    0]" color="0xFFFFFFFF" font="font:LargeBoldSystemFont" />
-        <Label id="btnForward" text="⏭"  translation="[100,  0]" color="0xFFFFFFFF" font="font:LargeBoldSystemFont" />
+      <Group id="controls" translation="[810, 1028]">
+        <!-- Rewind button -->
+        <Rectangle width="80" height="36" color="0x2A2A2A99" cornerRadius="6" translation="[0,   0]" />
+        <Label id="btnRewind"  text="&lt;&lt; 10s" translation="[6,   8]" color="0xE5E5E5FF" font="font:SmallBoldSystemFont" />
+        <!-- Play/Pause button -->
+        <Rectangle id="btnPlayBg" width="80" height="36" color="0xE50914CC" cornerRadius="6" translation="[96,  0]" />
+        <Label id="btnPlay"    text="Pause"    translation="[102, 8]" color="0xFFFFFFFF" font="font:SmallBoldSystemFont" />
+        <!-- Forward button -->
+        <Rectangle width="80" height="36" color="0x2A2A2A99" cornerRadius="6" translation="[192, 0]" />
+        <Label id="btnForward" text="10s &gt;&gt;" translation="[198, 8]" color="0xE5E5E5FF" font="font:SmallBoldSystemFont" />
       </Group>
 
     </Group>

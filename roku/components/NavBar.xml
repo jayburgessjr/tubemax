@@ -9,38 +9,50 @@
 
   <children>
 
-    <!-- Nav Background gradient -->
+    <!-- Nav solid base -->
     <Rectangle
       id="navBg"
       width="1920"
-      height="108"
-      color="0x141414FF"
+      height="100"
+      color="0x0A0A0AFF"
+    />
+    <!-- Nav bottom fade into content -->
+    <Rectangle width="1920" height="20" color="0x0A0A0A99" translation="[0, 100]" />
+    <Rectangle width="1920" height="14" color="0x0A0A0A55" translation="[0, 120]" />
+
+    <!-- Red left accent bar -->
+    <Rectangle
+      width="4"
+      height="40"
+      color="0xE50914FF"
+      translation="[68, 30]"
     />
 
     <!-- TubeMax Logo -->
     <Label
       id="logoLabel"
       text="TUBEMAX"
-      translation="[80, 36]"
-      color="0xE50914FF"
+      translation="[82, 33]"
+      color="0xFFFFFFFF"
       font="font:LargeBoldSystemFont"
     />
 
     <!-- Nav Items -->
-    <Group id="navItems" translation="[320, 40]">
-      <Label id="tab_Home"     text="Home"      translation="[0,   0]" color="0xFFFFFFFF" font="font:MediumBoldSystemFont" />
-      <Label id="tab_Search"   text="Search"    translation="[130, 0]" color="0xA0A0A0FF" font="font:MediumSystemFont" />
-      <Label id="tab_Trending" text="Trending"  translation="[280, 0]" color="0xA0A0A0FF" font="font:MediumSystemFont" />
-      <Label id="tab_Watchlist" text="Watchlist" translation="[440, 0]" color="0xA0A0A0FF" font="font:MediumSystemFont" />
+    <Group id="navItems" translation="[360, 38]">
+      <Label id="tab_Home"      text="Home"        translation="[0,   0]" color="0xFFFFFFFF" font="font:MediumBoldSystemFont" />
+      <Label id="tab_Search"    text="Search"      translation="[150, 0]" color="0x808080FF" font="font:MediumSystemFont" />
+      <Label id="tab_Trending"  text="Trending"    translation="[300, 0]" color="0x808080FF" font="font:MediumSystemFont" />
+      <Label id="tab_Watchlist" text="Watchlist"   translation="[470, 0]" color="0x808080FF" font="font:MediumSystemFont" />
     </Group>
 
     <!-- Active indicator bar -->
     <Rectangle
       id="activeBar"
-      width="60"
+      width="50"
       height="3"
       color="0xE50914FF"
-      translation="[320, 76]"
+      cornerRadius="2"
+      translation="[360, 68]"
     />
 
   </children>

@@ -9,4 +9,4 @@ splash_screen_hd=pkg:/images/splash_hd.png
 splash_color=#141414
 splash_min_time=1500
 ui_resolutions=FHD
-bs_const=API_KEY="YOUR_YOUTUBE_API_KEY_HERE"
+bs_const=API_KEY="AIzaSyDb_DqBsYPpOvH42cfnM0zCg_PxiScvfqM"

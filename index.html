@@ -13,29 +13,10 @@
   --card:#1a1a1a; --surface:#111; --border:#2a2a2a; --sw:52px;
 }
 
-body { background:#0a0a0a; color:#fff; font-family:'Inter',sans-serif; display:flex; flex-direction:column; align-items:center; min-height:100vh; padding:20px 20px 16px; gap:10px; }
+body { background:#000; color:#fff; font-family:'Inter',sans-serif; display:flex; flex-direction:row; height:100vh; overflow:hidden; padding:0; gap:0; }
 
-/* ── Page chrome ── */
-.ph { width:100%; max-width:1100px; display:flex; align-items:center; justify-content:space-between; }
-.pt { font-family:'Bebas Neue',sans-serif; font-size:1.5rem; color:var(--red); letter-spacing:3px; }
-.tabs { display:flex; gap:4px; flex-wrap:wrap; }
-.tab { padding:5px 11px; border-radius:5px; border:1px solid var(--border); background:var(--surface); color:var(--g2); font-size:.65rem; font-weight:600; cursor:pointer; transition:all .18s; display:flex; align-items:center; gap:4px; }
-.tab:hover { border-color:var(--g3); color:#fff; }
-.tab.on { background:var(--red); border-color:var(--red); color:#fff; }
-.tab .material-symbols-rounded { font-size:14px; }
-
-.apibar { width:100%; max-width:1100px; display:flex; align-items:center; gap:10px; background:#0f0f0f; border:1px solid #1e1e1e; border-radius:7px; padding:9px 14px; }
-.apibar label { font-size:.65rem; color:var(--g3); white-space:nowrap; }
-.apibar input { flex:1; background:var(--card); border:1px solid #333; border-radius:5px; padding:5px 9px; color:#fff; font-size:.68rem; outline:none; font-family:'Inter',sans-serif; }
-.apibar input:focus { border-color:var(--red); }
-.apibar button { padding:5px 14px; background:var(--red); color:#fff; border:none; border-radius:5px; font-size:.68rem; font-weight:700; cursor:pointer; white-space:nowrap; }
-.apibar button:hover { background:#c4070f; }
 .api-st { font-size:.6rem; white-space:nowrap; }
 .api-st.ok{color:#46d369} .api-st.err{color:var(--red)} .api-st.loading{color:var(--g3)}
-
-/* ── TV shell ── */
-.tv { width:100%; max-width:1100px; background:#000; border-radius:10px; border:2px solid #1a1a1a; box-shadow:0 20px 60px rgba(0,0,0,.9); overflow:hidden; }
-.screen { width:100%; aspect-ratio:16/9; background:#000; overflow:hidden; position:relative; display:flex; }
 
 /* ══════════════════════════════
    PERMANENT SIDEBAR — never re-renders
@@ -43,16 +24,16 @@ body { background:#0a0a0a; color:#fff; font-family:'Inter',sans-serif; display:f
 .sidebar {
   width:var(--sw);
   flex-shrink:0;
-  height:100%;
-  background:rgba(0,0,0,0.82);
+  height:100vh;
+  background:#080808;
   display:flex;
   flex-direction:column;
   align-items:center;
-  padding:12px 0;
+  padding:14px 0 12px;
   gap:4px;
   z-index:50;
   position:relative;
-  border-right:1px solid #1a1a1a;
+  border-right:1px solid #161616;
 }
 .sb-icon {
   width:34px; height:34px; border-radius:6px;
@@ -73,7 +54,7 @@ body { background:#0a0a0a; color:#fff; font-family:'Inter',sans-serif; display:f
 ══════════════════════════════ */
 .content-area {
   flex:1;
-  height:100%;
+  height:100vh;
   overflow:hidden;
   position:relative;
   background:#000;
@@ -164,11 +145,11 @@ body { background:#0a0a0a; color:#fff; font-family:'Inter',sans-serif; display:f
 /* ══════════════════════════════
    TRENDING PAGE
 ══════════════════════════════ */
-.trend-hero { position:relative; width:100%; height:36%; flex-shrink:0; overflow:hidden; background:#111; }
-.trend-hero img { width:100%; height:100%; object-fit:cover; opacity:.45; }
-.trend-hero-fade { position:absolute; inset:0; background:linear-gradient(to top,#000 0%,transparent 55%),linear-gradient(to right,#000 0%,transparent 45%); }
-.trend-hero-label { position:absolute; bottom:12px; left:14px; }
-.trend-hero-label .thl { font-family:'Bebas Neue',sans-serif; font-size:1.3rem; letter-spacing:1px; }
+.trend-hero { position:relative; width:100%; height:38%; flex-shrink:0; overflow:hidden; background:#0a0a0a; }
+.trend-hero img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center top; transition:opacity .5s; }
+.trend-hero-fade { position:absolute; inset:0; background:linear-gradient(to top,#000 0%,rgba(0,0,0,.5) 40%,transparent 70%),linear-gradient(to right,rgba(0,0,0,.7) 0%,transparent 50%); }
+.trend-hero-label { position:absolute; bottom:16px; left:16px; }
+.trend-hero-label .thl { font-family:'Bebas Neue',sans-serif; font-size:1.6rem; letter-spacing:1.5px; text-shadow:0 2px 8px rgba(0,0,0,.8); max-width:600px; line-height:1.1; }
 .tcats { display:flex; gap:5px; padding:8px 14px 5px; flex-shrink:0; overflow-x:auto; scrollbar-width:none; }
 .tcats::-webkit-scrollbar { display:none; }
 .tcat { padding:4px 11px; border-radius:20px; border:1px solid var(--border); background:transparent; color:var(--g2); font-size:.58rem; font-weight:600; cursor:pointer; white-space:nowrap; transition:all .15s; }
@@ -178,13 +159,33 @@ body { background:#0a0a0a; color:#fff; font-family:'Inter',sans-serif; display:f
 /* ══════════════════════════════
    SUBSCRIPTIONS PAGE
 ══════════════════════════════ */
-.ch-strip { display:flex; gap:8px; padding:0 14px 10px; overflow-x:auto; scrollbar-width:none; flex-shrink:0; }
+.ch-strip { display:flex; gap:10px; padding:0 16px 12px; overflow-x:auto; scrollbar-width:none; flex-shrink:0; }
 .ch-strip::-webkit-scrollbar { display:none; }
-.ch-pill { display:flex; flex-direction:column; align-items:center; gap:3px; cursor:pointer; flex-shrink:0; }
-.ch-av { width:34px; height:34px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:.5rem; font-weight:700; border:2px solid transparent; transition:border-color .15s; }
-.ch-pill.on .ch-av, .ch-pill:hover .ch-av { border-color:var(--red); }
-.ch-nm { font-size:.4rem; color:var(--g2); white-space:nowrap; max-width:42px; overflow:hidden; text-overflow:ellipsis; }
+.ch-pill { display:flex; flex-direction:column; align-items:center; gap:4px; cursor:pointer; flex-shrink:0; }
+.ch-av { width:38px; height:38px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:.52rem; font-weight:700; border:2px solid transparent; transition:all .18s; }
+.ch-pill.on .ch-av { border-color:var(--red); box-shadow:0 0 0 3px rgba(229,9,20,.2); }
+.ch-pill:hover .ch-av { border-color:var(--g3); }
+.ch-nm { font-size:.42rem; color:var(--g2); white-space:nowrap; max-width:48px; overflow:hidden; text-overflow:ellipsis; }
 .ch-dot { width:5px; height:5px; background:var(--red); border-radius:50%; }
+
+/* Subs 5-column grid */
+.subs-grid { display:grid; grid-template-columns:repeat(5,1fr); gap:18px 14px; padding:0 16px 20px; }
+.subs-card { cursor:pointer; position:relative; transition:transform .22s cubic-bezier(.2,.6,.2,1); }
+.subs-card:hover { transform:translateY(-4px); z-index:5; }
+.subs-card:hover .subs-thumb { box-shadow:0 10px 28px rgba(0,0,0,.8); }
+.subs-thumb { width:100%; aspect-ratio:16/9; border-radius:7px; overflow:hidden; background:var(--card); position:relative; transition:box-shadow .22s; }
+.subs-thumb img { width:100%; height:100%; object-fit:cover; display:block; }
+.subs-thumb-prog { position:absolute; bottom:0; left:0; right:0; height:3px; background:rgba(255,255,255,.12); }
+.subs-thumb-prog-fill { height:100%; background:var(--red); border-radius:2px; }
+.subs-play-ov { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; background:rgba(0,0,0,0); transition:background .18s; }
+.subs-card:hover .subs-play-ov { background:rgba(0,0,0,.35); }
+.subs-play-ov .material-symbols-rounded { font-size:32px; color:#fff; opacity:0; transform:scale(.8); transition:all .18s; }
+.subs-card:hover .subs-play-ov .material-symbols-rounded { opacity:1; transform:scale(1); }
+.subs-card-meta { padding:7px 2px 0; }
+.subs-card-title { font-size:.58rem; font-weight:600; color:var(--g1); line-height:1.4; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; margin-bottom:3px; }
+.subs-card-channel { font-size:.5rem; color:var(--g3); }
+body.light .subs-card-title { color:#111; }
+body.light .subs-card-channel { color:#777; }
 
 /* ══════════════════════════════
    HISTORY PAGE
@@ -304,80 +305,101 @@ body { background:#0a0a0a; color:#fff; font-family:'Inter',sans-serif; display:f
 .back-btn:hover { color:#fff; border-color:var(--g3); }
 
 /* ══════════════════════════════
-   AUTH OVERLAY — sits over entire screen
+   AUTH OVERLAY — full viewport
 ══════════════════════════════ */
 .auth-overlay {
-  position:absolute; inset:0; z-index:200;
+  position:fixed; inset:0; z-index:200;
   background:#000;
   display:flex; align-items:center; justify-content:center;
 }
 .auth-overlay.hidden { display:none; }
 
 /* Cinematic background */
-.auth-bg {
-  position:absolute; inset:0; overflow:hidden;
-}
+.auth-bg { position:absolute; inset:0; overflow:hidden; }
 .auth-bg-grid {
-  position:absolute; inset:0;
-  display:grid; grid-template-columns:repeat(5,1fr); grid-template-rows:repeat(3,1fr);
-  gap:2px; opacity:.12;
+  position:absolute; inset:-4px;
+  display:grid; grid-template-columns:repeat(6,1fr); grid-template-rows:repeat(3,1fr);
+  gap:3px; opacity:.22; filter:blur(1.5px) saturate(0.7);
 }
-.auth-bg-cell { background:var(--card); overflow:hidden; }
+.auth-bg-cell { background:#0d0d0d; overflow:hidden; }
 .auth-bg-cell img { width:100%; height:100%; object-fit:cover; }
 .auth-bg-fade {
   position:absolute; inset:0;
-  background:radial-gradient(ellipse 80% 80% at 50% 50%, rgba(0,0,0,.85) 0%, rgba(0,0,0,.5) 100%);
+  background:
+    linear-gradient(to bottom, rgba(0,0,0,.6) 0%, rgba(0,0,0,.4) 50%, rgba(0,0,0,.75) 100%),
+    linear-gradient(135deg, rgba(229,9,20,.12) 0%, transparent 60%),
+    radial-gradient(ellipse 70% 70% at 50% 50%, rgba(0,0,0,.5) 0%, rgba(0,0,0,.85) 100%);
 }
 
 /* Login card */
 .auth-card {
   position:relative; z-index:10;
   display:flex; flex-direction:column; align-items:center;
-  width:260px; padding:28px 24px 24px;
-  background:rgba(20,20,20,0.94);
-  border:1px solid #2a2a2a;
-  border-radius:12px;
-  box-shadow:0 24px 60px rgba(0,0,0,.8);
-  backdrop-filter:blur(12px);
+  width:248px; padding:26px 22px 20px;
+  background:rgba(8,8,8,0.88);
+  border:1px solid rgba(255,255,255,.07);
+  border-radius:16px;
+  box-shadow: 0 0 0 1px rgba(229,9,20,.12), 0 32px 80px rgba(0,0,0,.95), inset 0 1px 0 rgba(255,255,255,.04);
+  backdrop-filter:blur(24px) saturate(1.4);
+}
+
+/* Logo mark */
+.auth-mark {
+  width:36px; height:36px; background:var(--red); border-radius:8px;
+  display:flex; align-items:center; justify-content:center;
+  font-family:'Bebas Neue',sans-serif; font-size:.7rem; color:#fff; letter-spacing:1px;
+  box-shadow:0 6px 20px rgba(229,9,20,.55), 0 2px 6px rgba(229,9,20,.3);
+  margin-bottom:10px;
 }
 .auth-logo {
   font-family:'Bebas Neue',sans-serif;
-  font-size:2.2rem; letter-spacing:4px; color:var(--red);
-  margin-bottom:4px;
+  font-size:1.9rem; letter-spacing:6px; color:#fff;
+  margin-bottom:3px;
+  text-shadow:0 0 40px rgba(229,9,20,.25);
 }
 .auth-tagline {
-  font-size:.55rem; color:var(--g3); letter-spacing:1px;
-  text-transform:uppercase; margin-bottom:22px;
+  font-size:.48rem; color:var(--g4); letter-spacing:2.5px;
+  text-transform:uppercase; margin-bottom:18px;
 }
-.auth-divider { width:100%; height:1px; background:#222; margin-bottom:20px; }
+
+/* Feature list */
+.auth-features { width:100%; display:flex; flex-direction:column; gap:5px; margin-bottom:18px; }
+.auth-feat { display:flex; align-items:center; gap:7px; font-size:.52rem; color:var(--g3); }
+.auth-feat .material-symbols-rounded { font-size:13px; color:var(--red); flex-shrink:0; }
+
+/* Divider */
+.auth-divider { width:100%; display:flex; align-items:center; gap:8px; margin-bottom:14px; }
+.auth-divider::before,.auth-divider::after { content:''; flex:1; height:1px; background:#1c1c1c; }
+.auth-divider span { font-size:.46rem; color:var(--g4); letter-spacing:.5px; white-space:nowrap; }
 
 /* Google sign-in button */
 .google-btn {
-  width:100%; display:flex; align-items:center; justify-content:center; gap:9px;
-  padding:10px 16px;
+  width:100%; display:flex; align-items:center; justify-content:center; gap:8px;
+  padding:9px 16px;
   background:#fff; color:#1f1f1f;
-  border:none; border-radius:6px;
-  font-size:.68rem; font-weight:600; font-family:'Inter',sans-serif;
-  cursor:pointer; transition:background .18s; margin-bottom:10px;
+  border:none; border-radius:8px;
+  font-size:.65rem; font-weight:600; font-family:'Inter',sans-serif;
+  cursor:pointer; transition:all .18s; margin-bottom:8px;
+  box-shadow:0 2px 8px rgba(0,0,0,.4);
 }
-.google-btn:hover { background:#f0f0f0; }
-.google-btn svg { width:16px; height:16px; flex-shrink:0; }
+.google-btn:hover { background:#f2f2f2; transform:translateY(-1px); box-shadow:0 4px 14px rgba(0,0,0,.5); }
+.google-btn svg { width:14px; height:14px; flex-shrink:0; }
 
 /* Continue as guest */
 .guest-btn {
-  width:100%; padding:9px;
-  background:transparent; color:var(--g2);
-  border:1px solid #2a2a2a; border-radius:6px;
-  font-size:.62rem; font-family:'Inter',sans-serif;
-  cursor:pointer; transition:all .18s; margin-bottom:18px;
+  width:100%; padding:8px;
+  background:rgba(255,255,255,.04); color:var(--g3);
+  border:1px solid rgba(255,255,255,.08); border-radius:8px;
+  font-size:.6rem; font-family:'Inter',sans-serif;
+  cursor:pointer; transition:all .18s; margin-bottom:14px;
 }
-.guest-btn:hover { border-color:var(--g3); color:#fff; }
+.guest-btn:hover { background:rgba(255,255,255,.08); color:var(--g1); border-color:rgba(255,255,255,.15); }
 
 .auth-note {
-  font-size:.48rem; color:var(--g4); text-align:center; line-height:1.5;
+  font-size:.44rem; color:var(--g4); text-align:center; line-height:1.6;
 }
 .auth-note a { color:var(--g3); text-decoration:none; }
-.auth-note a:hover { color:#fff; }
+.auth-note a:hover { color:var(--g1); }
 
 /* Signed-in user chip in sidebar */
 .sb-user {
@@ -429,50 +451,120 @@ body { background:#0a0a0a; color:#fff; font-family:'Inter',sans-serif; display:f
 .auth-pill-name { color:var(--g1); font-weight:600; }
 .auth-pill-guest { color:var(--g3); }
 
-/* ── Hint ── */
-.hint { width:100%; max-width:1100px; display:flex; align-items:center; justify-content:center; flex-wrap:wrap; gap:12px; padding:8px 14px; background:#080808; border-radius:7px; border:1px solid #181818; }
-.hi { display:flex; align-items:center; gap:4px; font-size:.56rem; color:var(--g3); }
-.hk { background:#181818; border:1px solid #282828; border-radius:3px; padding:2px 5px; font-size:.5rem; color:var(--g2); font-weight:600; }
-.sep { color:#222; }
+/* ══════════════════════════════
+   SETTINGS PAGE
+══════════════════════════════ */
+.settings-scroll { flex:1; overflow-y:auto; padding:0 14px 16px; scrollbar-width:thin; scrollbar-color:#222 transparent; min-height:0; }
+.settings-scroll::-webkit-scrollbar { width:3px; }
+.settings-scroll::-webkit-scrollbar-thumb { background:#222; }
+.sett-section { margin-bottom:18px; }
+.sett-heading { font-size:.58rem; font-weight:700; color:var(--g3); text-transform:uppercase; letter-spacing:1px; padding-bottom:6px; border-bottom:1px solid #1a1a1a; margin-bottom:10px; }
+.sett-row { display:flex; align-items:center; justify-content:space-between; gap:12px; padding:8px 0; border-bottom:1px solid #111; }
+.sett-linfo { flex:1; min-width:0; }
+.sett-label { font-size:.62rem; color:var(--g1); font-weight:500; }
+.sett-sub { font-size:.52rem; color:var(--g3); margin-top:2px; }
+.sett-iw { display:flex; gap:5px; align-items:center; }
+.sett-input { background:var(--card); border:1px solid #333; border-radius:5px; padding:5px 9px; color:#fff; font-size:.65rem; outline:none; font-family:'Inter',sans-serif; width:170px; }
+.sett-input:focus { border-color:var(--red); }
+.sett-btn { padding:5px 11px; background:var(--red); color:#fff; border:none; border-radius:5px; font-size:.6rem; font-weight:700; cursor:pointer; white-space:nowrap; }
+.sett-btn:hover { background:#c4070f; }
+.sett-btn.sec { background:var(--card); color:var(--g2); border:1px solid #333; }
+.sett-btn.sec:hover { background:#222; color:#fff; }
+.sett-st { font-size:.55rem; min-height:14px; margin-top:3px; padding:0 1px; }
+/* Toggle switch */
+.toggle { position:relative; width:34px; height:18px; flex-shrink:0; }
+.toggle input { opacity:0; width:0; height:0; position:absolute; }
+.toggle-track { position:absolute; inset:0; background:#333; border-radius:18px; cursor:pointer; transition:background .2s; }
+.toggle input:checked + .toggle-track { background:var(--red); }
+.toggle-track::before { content:''; position:absolute; width:14px; height:14px; left:2px; top:2px; background:#fff; border-radius:50%; transition:transform .2s; }
+.toggle input:checked + .toggle-track::before { transform:translateX(16px); }
+
+/* ── Light mode ── */
+body.light { background:#f0f0f0; color:#111; }
+body.light .sidebar { background:#f8f8f8; border-right-color:#ddd; }
+body.light .sb-icon { color:#666; }
+body.light .sb-icon:hover { background:rgba(0,0,0,.06); color:#111; }
+body.light .sb-div { background:#ddd; }
+body.light .content-area { background:#f5f5f5; }
+body.light .page { background:#f5f5f5; }
+body.light .rows-area { background:#f5f5f5; }
+body.light .cat-bar { background:#f5f5f5; border-bottom-color:#e0e0e0; }
+body.light .cat-pill { color:#555; border-color:#ccc; }
+body.light .cat-pill:hover { color:#111; border-color:#999; }
+body.light .cat-pill.on { color:#fff; border-color:var(--red); }
+body.light .clabel { color:#222; }
+body.light .cmeta { color:#777; }
+body.light .poster { background:#ddd; }
+body.light .tip { background:#fff; border-color:#ddd; box-shadow:0 8px 20px rgba(0,0,0,.12); }
+body.light .ttt { color:#111; }
+body.light .ttm { color:#666; }
+body.light .row-label { color:#111; }
+body.light .page-hdr-title { color:#111; }
+body.light .page-hdr-sub { color:#888; }
+body.light .sett-heading { color:#888; border-bottom-color:#ddd; }
+body.light .sett-row { border-bottom-color:#e8e8e8; }
+body.light .sett-label { color:#111; }
+body.light .sett-sub { color:#888; }
+body.light .sett-input { background:#fff; border-color:#ccc; color:#111; }
+body.light .toggle-track { background:#bbb; }
+body.light .hint { background:#e8e8e8; border-color:#ddd; }
+body.light .hi { color:#666; }
+body.light .hk { background:#ddd; border-color:#ccc; color:#444; }
+body.light .sep { color:#ccc; }
+body.light .vd-title { color:#111; }
+body.light .vd-meta span { color:#666; }
+body.light .vd-ch-row { border-color:#e0e0e0; }
+body.light .vd-ch-name { color:#111; }
+body.light .vd-act { color:#555; border-color:#ccc; }
+body.light .vd-act:hover { color:#111; }
+body.light .vd-right { border-left-color:#ddd; }
+body.light .vd-rh { border-bottom-color:#ddd; color:#111; }
+body.light .vd-desc { color:#444; }
+body.light .un-card:hover { background:#e8e8e8; }
+body.light .un-t { color:#333; }
+body.light .un-c { color:#777; }
+body.light .un-th { background:#ddd; }
+body.light .siw { background:#fff; }
+body.light .sit { color:#111; }
+body.light .k { background:#e0e0e0; color:#333; }
+body.light .hist-bar { color:#111; }
+body.light .hs-btn { color:#555; border-color:#ccc; }
+body.light .hs-btn.on { color:#111; border-color:#999; background:#e0e0e0; }
+body.light .hclear { color:#888; border-color:#ccc; }
+body.light .date-grp { color:#888; border-bottom-color:#ddd; }
+body.light .tcat { color:#555; border-color:#ccc; }
+body.light .tcat.on { color:#fff; }
+body.light .ch-nm { color:#555; }
+body.light .trend-hero { background:#e0e0e0; }
+body.light .wl-empty { color:#888; }
+
+/* ── Hero genre tags ── */
+.hero-tags { display:flex; gap:4px; flex-wrap:wrap; margin-bottom:8px; }
+.hero-tag { padding:2px 7px; border-radius:3px; font-size:.44rem; font-weight:700; letter-spacing:.6px; text-transform:uppercase; border:1px solid rgba(255,255,255,.2); color:rgba(255,255,255,.8); background:rgba(0,0,0,.45); backdrop-filter:blur(4px); }
+.hero-tag.primary { background:rgba(229,9,20,.85); border-color:transparent; color:#fff; }
+
+/* ── Category filter bar ── */
+.cat-bar { display:flex; gap:5px; padding:7px 14px 6px; flex-shrink:0; overflow-x:auto; scrollbar-width:none; background:#000; border-bottom:1px solid #111; }
+.cat-bar::-webkit-scrollbar { display:none; }
+.cat-pill { padding:4px 11px; border-radius:20px; border:1px solid var(--border); background:transparent; color:var(--g2); font-size:.55rem; font-weight:600; cursor:pointer; white-space:nowrap; transition:all .15s; flex-shrink:0; }
+.cat-pill:hover { border-color:var(--g3); color:#fff; }
+.cat-pill.on { background:var(--red); border-color:var(--red); color:#fff; }
+
 </style>
 </head>
 <body>
 
-<!-- ── Chrome ── -->
-<div class="ph">
-  <div class="pt">TUBEMAX</div>
-  <div style="display:flex;align-items:center;gap:8px;">
-    <div class="tabs">
-      <button class="tab on"  data-page="home">        <span class="material-symbols-rounded">home</span>Home</button>
-      <button class="tab"     data-page="trending">    <span class="material-symbols-rounded">trending_up</span>Trending</button>
-      <button class="tab"     data-page="watchlist">   <span class="material-symbols-rounded">bookmarks</span>Watchlist</button>
-      <button class="tab"     data-page="subs">        <span class="material-symbols-rounded">subscriptions</span>Subscriptions</button>
-      <button class="tab"     data-page="history">     <span class="material-symbols-rounded">history</span>History</button>
-      <button class="tab"     data-page="search">      <span class="material-symbols-rounded">search</span>Search</button>
-      <button class="tab"     data-page="player">      <span class="material-symbols-rounded">play_circle</span>Player</button>
-    </div>
-    <!-- Auth pill -->
-    <div class="auth-pill" id="authPill" onclick="toggleUserMenu()">
-      <div class="auth-pill-av" id="authPillAv">
-        <div class="auth-pill-av-init" id="authPillInit">?</div>
-      </div>
-      <span class="auth-pill-guest" id="authPillName">Sign In</span>
-    </div>
-  </div>
-</div>
+<!-- Hidden API key input — managed via Settings page only -->
+<input type="hidden" id="apiKeyInput">
+<span class="api-st" id="apiStatus" style="display:none"></span>
 
-<div class="apibar">
-  <label>YouTube API Key:</label>
-  <input type="password" id="apiKeyInput" placeholder="Paste YouTube Data API v3 key to load live thumbnails…">
-  <button onclick="loadAll()">Load Live Data</button>
-  <span class="api-st" id="apiStatus">Enter key to load real thumbnails</span>
-</div>
-
-<!-- ── TV ── -->
-<div class="tv"><div class="screen">
+<!-- Hidden pill elements kept for JS compatibility -->
+<div id="authPill" style="display:none"><div id="authPillAv"><div id="authPillInit"></div></div><span id="authPillName"></span></div>
 
   <!-- ════ ONE PERMANENT SIDEBAR ════ -->
   <div class="sidebar" id="mainSidebar">
+    <!-- TUBEMAX logo mark -->
+    <div style="width:34px;height:34px;background:var(--red);border-radius:7px;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:.75rem;letter-spacing:1px;color:#fff;margin-bottom:10px;flex-shrink:0;box-shadow:0 3px 12px rgba(229,9,20,.45);">TM</div>
     <div class="sb-icon on" data-page="home"     title="Home">         <span class="material-symbols-rounded">home</span></div>
     <div class="sb-icon"    data-page="search"   title="Search">       <span class="material-symbols-rounded">search</span></div>
     <div class="sb-icon"    data-page="trending" title="Trending">     <span class="material-symbols-rounded">trending_up</span></div>
@@ -480,7 +572,9 @@ body { background:#0a0a0a; color:#fff; font-family:'Inter',sans-serif; display:f
     <div class="sb-icon"    data-page="subs"     title="Subscriptions"><span class="material-symbols-rounded">subscriptions</span></div>
     <div class="sb-icon"    data-page="history"  title="History">      <span class="material-symbols-rounded">history</span></div>
     <div class="sb-div"></div>
-    <div class="sb-icon"    data-page="watchlist"title="Watchlist">    <span class="material-symbols-rounded">bookmarks</span></div>
+    <div class="sb-icon"    data-page="watchlist" title="Playlists">   <span class="material-symbols-rounded">playlist_play</span></div>
+    <div class="sb-div"></div>
+    <div class="sb-icon"    data-page="settings"  title="Settings">   <span class="material-symbols-rounded">settings</span></div>
     <!-- User avatar at bottom of sidebar -->
     <div class="sb-user" id="sbUser" onclick="toggleUserMenu()" title="Account" style="margin-top:auto;margin-bottom:4px;">
       <div class="sb-user-init" id="sbUserInit">?</div>
@@ -494,7 +588,8 @@ body { background:#0a0a0a; color:#fff; font-family:'Inter',sans-serif; display:f
           <div class="um-email" id="umEmail">Not signed in</div>
         </div>
       </div>
-      <div class="um-item" onclick="goPage('watchlist');closeUserMenu()"><span class="material-symbols-rounded">bookmarks</span>My Watchlist</div>
+      <div class="um-item" onclick="goPage('settings');closeUserMenu()"><span class="material-symbols-rounded">settings</span>Settings</div>
+      <div class="um-item" onclick="goPage('watchlist');closeUserMenu()"><span class="material-symbols-rounded">playlist_play</span>My Playlists</div>
       <div class="um-item" onclick="goPage('history');closeUserMenu()"><span class="material-symbols-rounded">history</span>Watch History</div>
       <div class="um-item" onclick="goPage('subs');closeUserMenu()"><span class="material-symbols-rounded">subscriptions</span>Subscriptions</div>
       <div class="um-item um-signout" id="umSignBtn" onclick="handleSignAction()"><span class="material-symbols-rounded">login</span><span id="umSignLabel">Sign In with Google</span></div>
@@ -508,10 +603,15 @@ body { background:#0a0a0a; color:#fff; font-family:'Inter',sans-serif; display:f
       <div class="auth-bg-fade"></div>
     </div>
     <div class="auth-card">
+      <div class="auth-mark">TM</div>
       <div class="auth-logo">TUBEMAX</div>
       <div class="auth-tagline">YouTube. Refined.</div>
-      <div class="auth-divider"></div>
-      <!-- Google OAuth button -->
+      <div class="auth-features">
+        <div class="auth-feat"><span class="material-symbols-rounded">play_circle</span>Netflix-style YouTube experience</div>
+        <div class="auth-feat"><span class="material-symbols-rounded">subscriptions</span>Your subscriptions, beautifully organized</div>
+        <div class="auth-feat"><span class="material-symbols-rounded">bookmark</span>Watchlist, history &amp; continue watching</div>
+      </div>
+      <div class="auth-divider"><span>Sign in to continue</span></div>
       <button class="google-btn" onclick="signInWithGoogle()">
         <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
           <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
@@ -521,11 +621,10 @@ body { background:#0a0a0a; color:#fff; font-family:'Inter',sans-serif; display:f
         </svg>
         Continue with Google
       </button>
-      <button class="guest-btn" onclick="continueAsGuest()">Browse as Guest</button>
+      <button class="guest-btn" onclick="continueAsGuest()">Browse without signing in</button>
       <div class="auth-note">
-        By signing in you agree to our<br>
-        <a href="#">Terms of Service</a> &amp; <a href="#">Privacy Policy</a>.<br><br>
-        TubeMax uses Google OAuth to access your YouTube data. We never store your password.
+        By continuing you agree to our <a href="/terms" target="_blank">Terms of Service</a> &amp; <a href="/privacy" target="_blank">Privacy Policy</a>.
+        TubeMax uses Google OAuth — we never store your password.
       </div>
     </div>
   </div>
@@ -542,13 +641,24 @@ body { background:#0a0a0a; color:#fff; font-family:'Inter',sans-serif; display:f
           <div class="hero-sl"><div class="hero-tb">T</div><span class="hero-st">Trending</span></div>
           <div class="hero-title" id="heroTitle">Loading…</div>
           <div class="hero-rank"><span class="top10">TOP 10</span><span class="hero-rt">#1 Trending Today</span></div>
+          <div class="hero-tags" id="heroTags"></div>
           <div class="hero-desc" id="heroDesc">Loading description…</div>
           <div class="hero-btns">
-            <button class="btn-play" id="heroPlayBtn">▶ Play</button>
+            <button class="btn-play" id="heroPlayBtn"><span class="material-symbols-rounded" style="font-size:15px">play_arrow</span>Play</button>
             <button class="btn-info" id="heroInfoBtn">More Info</button>
           </div>
         </div>
         <div class="hero-rat"><div class="rl"></div><span>HD</span></div>
+      </div>
+      <div class="cat-bar" id="catBar">
+        <div class="cat-pill on" onclick="filterHomeCategory(this,'all')">All</div>
+        <div class="cat-pill" onclick="filterHomeCategory(this,'music')">Music</div>
+        <div class="cat-pill" onclick="filterHomeCategory(this,'gaming')">Gaming</div>
+        <div class="cat-pill" onclick="filterHomeCategory(this,'sports')">Sports</div>
+        <div class="cat-pill" onclick="filterHomeCategory(this,'news')">News</div>
+        <div class="cat-pill" onclick="filterHomeCategory(this,'tech')">Tech</div>
+        <div class="cat-pill" onclick="filterHomeCategory(this,'movies')">Movies</div>
+        <div class="cat-pill" onclick="filterHomeCategory(this,'comedy')">Comedy</div>
       </div>
       <div class="rows-area" id="rowsArea">
         <div style="padding:16px 14px;color:#333;font-size:.63rem;">Enter your YouTube API key above and click Load Live Data.</div>
@@ -561,9 +671,14 @@ body { background:#0a0a0a; color:#fff; font-family:'Inter',sans-serif; display:f
         <img id="trendHeroImg" src="" alt="" onerror="this.style.opacity=0">
         <div class="trend-hero-fade"></div>
         <div class="trend-hero-label">
-          <div style="font-size:.46rem;color:var(--g2);letter-spacing:2px;text-transform:uppercase;margin-bottom:3px;">Right Now</div>
+          <div style="font-size:.46rem;color:var(--g2);letter-spacing:2px;text-transform:uppercase;margin-bottom:5px;">#1 Trending</div>
           <div class="thl" id="trendHeroTitle">Trending Worldwide</div>
-          <span class="bdg blive" style="margin-top:4px;display:inline-block;">● Live Rankings</span>
+          <div style="display:flex;align-items:center;gap:8px;margin-top:10px;">
+            <button onclick="if(cachedTrending[0])openDetail(cachedTrending[0])" style="display:flex;align-items:center;gap:5px;background:#fff;color:#000;border:none;border-radius:4px;padding:6px 14px;font-size:.62rem;font-weight:700;cursor:pointer;letter-spacing:.5px;">
+              <span class="material-symbols-rounded" style="font-size:16px;">play_arrow</span>Watch
+            </button>
+            <span class="bdg blive">● Trending Now</span>
+          </div>
         </div>
       </div>
       <div class="tcats" id="trendCats">
@@ -576,24 +691,24 @@ body { background:#0a0a0a; color:#fff; font-family:'Inter',sans-serif; display:f
         <div class="tcat" onclick="trendCat(this,'technology 2025')">Tech</div>
         <div class="tcat" onclick="trendCat(this,'comedy 2025')">Comedy</div>
       </div>
-      <div class="page-scroll">
-        <div class="pg" id="trendGrid"></div>
+      <div class="page-scroll" style="padding:0;">
+        <div class="subs-grid" id="trendGrid"></div>
       </div>
     </div>
 
     <!-- WATCHLIST -->
     <div class="page" id="page-watchlist">
       <div class="page-hdr">
-        <span class="material-symbols-rounded" style="font-size:20px;color:var(--red)">bookmarks</span>
-        <div><div class="page-hdr-title">My Watchlist</div><div class="page-hdr-sub" id="wlSub">0 saved videos</div></div>
+        <span class="material-symbols-rounded" style="font-size:20px;color:var(--red)">playlist_play</span>
+        <div><div class="page-hdr-title">My Playlists</div><div class="page-hdr-sub" id="wlSub">Sign in to see your playlists</div></div>
       </div>
-      <div class="page-scroll" style="flex:1;">
+      <div class="page-scroll" style="flex:1;padding:0;">
         <div id="wlEmpty" class="wl-empty">
-          <span class="material-symbols-rounded">bookmark_add</span>
-          <p>Your watchlist is empty</p>
-          <small>Hit Save on any video to add it here</small>
+          <span class="material-symbols-rounded">playlist_add</span>
+          <p>No playlists found</p>
+          <small>Sign in with Google to see your YouTube playlists</small>
         </div>
-        <div class="pg" id="wlGrid" style="display:none;"></div>
+        <div class="subs-grid" id="wlGrid" style="display:none;"></div>
       </div>
     </div>
 
@@ -601,16 +716,19 @@ body { background:#0a0a0a; color:#fff; font-family:'Inter',sans-serif; display:f
     <div class="page" id="page-subs">
       <div class="page-hdr">
         <span class="material-symbols-rounded" style="font-size:20px;color:var(--red)">subscriptions</span>
-        <div><div class="page-hdr-title">Subscriptions</div><div class="page-hdr-sub">Videos from channels you follow</div></div>
+        <div>
+          <div class="page-hdr-title">Subscriptions</div>
+          <div class="page-hdr-sub" id="subsSub">Videos from channels you follow</div>
+        </div>
       </div>
       <div class="ch-strip" id="chStrip">
         <div class="ch-pill on" onclick="filterCh(this,'')">
-          <div class="ch-av" style="background:var(--red)"><span class="material-symbols-rounded" style="font-size:15px">subscriptions</span></div>
+          <div class="ch-av" style="background:var(--red)"><span class="material-symbols-rounded" style="font-size:16px">subscriptions</span></div>
           <div class="ch-nm">All</div>
         </div>
       </div>
-      <div class="page-scroll">
-        <div class="pg" id="subsGrid">
+      <div class="page-scroll" style="padding:0;">
+        <div class="subs-grid" id="subsGrid">
           <div style="grid-column:1/-1;color:#333;font-size:.6rem;padding:8px;">Load live data to see subscription videos.</div>
         </div>
       </div>
@@ -632,8 +750,8 @@ body { background:#0a0a0a; color:#fff; font-family:'Inter',sans-serif; display:f
           <span class="material-symbols-rounded">delete_sweep</span>Clear
         </button>
       </div>
-      <div class="page-scroll">
-        <div class="pg" id="histGrid">
+      <div class="page-scroll" style="padding:0;">
+        <div class="subs-grid" id="histGrid">
           <div style="grid-column:1/-1;color:#333;font-size:.6rem;padding:8px;">Load live data to populate history.</div>
         </div>
       </div>
@@ -706,7 +824,7 @@ body { background:#0a0a0a; color:#fff; font-family:'Inter',sans-serif; display:f
         </div>
         <div class="sright">
           <div class="rlbl" id="searchLbl">Results appear here after search</div>
-          <div class="rgrid" id="searchGrid"></div>
+          <div class="subs-grid" id="searchGrid" style="grid-template-columns:repeat(3,1fr);"></div>
         </div>
       </div>
     </div>
@@ -737,30 +855,143 @@ body { background:#0a0a0a; color:#fff; font-family:'Inter',sans-serif; display:f
       </div>
     </div>
 
-  </div><!-- /content-area -->
-</div></div><!-- /screen /tv -->
+    <!-- SETTINGS -->
+    <div class="page" id="page-settings">
+      <div class="page-hdr">
+        <span class="material-symbols-rounded" style="font-size:20px;color:var(--red)">settings</span>
+        <div><div class="page-hdr-title">Settings</div><div class="page-hdr-sub">Manage your TubeMax preferences</div></div>
+      </div>
+      <div class="settings-scroll">
+        <div class="sett-section">
+          <div class="sett-heading">YouTube API</div>
+          <div class="sett-row">
+            <div class="sett-linfo">
+              <div class="sett-label">API Key</div>
+              <div class="sett-sub">YouTube Data API v3 key from Google Cloud Console</div>
+            </div>
+            <div class="sett-iw">
+              <input type="password" class="sett-input" id="settApiKey" placeholder="Paste API key…">
+              <button class="sett-btn sec" onclick="toggleSettApiVis(this)">Show</button>
+              <button class="sett-btn" onclick="saveApiKeySett()">Save</button>
+            </div>
+          </div>
+          <div class="sett-st" id="settApiSt"></div>
+        </div>
+        <div class="sett-section">
+          <div class="sett-heading">Appearance</div>
+          <div class="sett-row">
+            <div class="sett-linfo">
+              <div class="sett-label">Light Mode</div>
+              <div class="sett-sub">Switch between dark and light themes</div>
+            </div>
+            <label class="toggle"><input type="checkbox" id="lightModeToggle" onchange="applyTheme(this.checked)"><div class="toggle-track"></div></label>
+          </div>
+          <div class="sett-row">
+            <div class="sett-linfo">
+              <div class="sett-label">Auto-rotate Hero</div>
+              <div class="sett-sub">Cycle the hero banner automatically every 8 seconds</div>
+            </div>
+            <label class="toggle"><input type="checkbox" id="autoRotateToggle" checked onchange="settAutoRotate=this.checked"><div class="toggle-track"></div></label>
+          </div>
+        </div>
+        <div class="sett-section">
+          <div class="sett-heading">Playback</div>
+          <div class="sett-row">
+            <div class="sett-linfo">
+              <div class="sett-label">Continue Watching</div>
+              <div class="sett-sub">Remember where you left off on each video</div>
+            </div>
+            <label class="toggle"><input type="checkbox" id="cwEnabledToggle" checked><div class="toggle-track"></div></label>
+          </div>
+          <div class="sett-row">
+            <div class="sett-linfo">
+              <div class="sett-label">Autoplay Next</div>
+              <div class="sett-sub">Automatically play the next video when one ends</div>
+            </div>
+            <label class="toggle"><input type="checkbox" id="autoplayToggle" checked><div class="toggle-track"></div></label>
+          </div>
+        </div>
+        <div class="sett-section">
+          <div class="sett-heading">Data &amp; Privacy</div>
+          <div class="sett-row">
+            <div class="sett-linfo">
+              <div class="sett-label">Clear Continue Watching</div>
+              <div class="sett-sub">Remove all saved watch progress</div>
+            </div>
+            <button class="sett-btn sec" onclick="clearCWProgress()">Clear</button>
+          </div>
+          <div class="sett-row">
+            <div class="sett-linfo">
+              <div class="sett-label">Clear Watch History</div>
+              <div class="sett-sub">Remove all videos from your history</div>
+            </div>
+            <button class="sett-btn sec" onclick="clearHist()">Clear</button>
+          </div>
+          <div class="sett-row">
+            <div class="sett-linfo">
+              <div class="sett-label">Reload Playlists</div>
+              <div class="sett-sub">Refresh your YouTube playlists from Google</div>
+            </div>
+            <button class="sett-btn sec" onclick="goPage('watchlist')">Reload</button>
+          </div>
+        </div>
+        <div class="sett-section">
+          <div class="sett-heading">About</div>
+          <div class="sett-row">
+            <div class="sett-linfo">
+              <div class="sett-label">TubeMax</div>
+              <div class="sett-sub">Version 1.0 · Built by Revuity Systems</div>
+            </div>
+          </div>
+          <div class="sett-row">
+            <div class="sett-linfo">
+              <div class="sett-label">Legal</div>
+              <div class="sett-sub">
+                <a href="/privacy" target="_blank" style="color:var(--red);text-decoration:none;">Privacy Policy</a>
+                &nbsp;·&nbsp;
+                <a href="/terms" target="_blank" style="color:var(--red);text-decoration:none;">Terms of Service</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
-<div class="hint">
-  <div class="hi"><span class="hk">Sidebar</span>Navigate pages</div><span class="sep">|</span>
-  <div class="hi"><span class="hk">D-Pad</span>Browse cards</div><span class="sep">|</span>
-  <div class="hi"><span class="hk">OK</span>Select</div><span class="sep">|</span>
-  <div class="hi"><span class="hk">More Info</span>Video detail</div><span class="sep">|</span>
-  <div class="hi"><span class="hk">Save</span>Watchlist</div><span class="sep">|</span>
-  <div class="hi">🖱 Click any card to open • Hover to preview</div>
-</div>
+  </div><!-- /content-area -->
+
 
 <script>
 // ════════════════════════════════
 // NAVIGATION — sidebar never moves
 // ════════════════════════════════
-const PAGES = ['home','trending','watchlist','subs','history','detail','search','player'];
+const PAGES = ['home','trending','watchlist','subs','history','detail','search','player','settings'];
 let prevPage = 'home';
 let currentPage = 'home';
 
 function goPage(id) {
   if (!PAGES.includes(id)) return;
+  // Stop player progress tracking when leaving player
+  if (currentPage === 'player' && id !== 'player') stopProgressTracking();
   if (id !== 'player') prevPage = currentPage;
   currentPage = id;
+
+  // Refresh Continue Watching row when returning home
+  if (id === 'home') {
+    const cwEl = document.getElementById('ct_Continue_Watching');
+    if (cwEl) {
+      const cwItems = getCWProgress();
+      if (cwItems.length) fillTrack(cwEl, cwItems, cwItems.map(i => i.pct || 0));
+    }
+  }
+
+  // Sync settings page API key field
+  if (id === 'settings') {
+    const sk = document.getElementById('settApiKey');
+    if (sk && !sk.value) sk.value = document.getElementById('apiKeyInput').value;
+  }
+
+  // Load playlists when navigating to watchlist tab
+  if (id === 'watchlist') loadPlaylists();
 
   // Swap page content
   PAGES.forEach(p => {
@@ -873,6 +1104,14 @@ function renderHero(idx) {
   document.getElementById('heroDesc').textContent = (v.desc || '').slice(0, 200);
   document.getElementById('heroPlayBtn').onclick = () => { openPlayer(v); };
   document.getElementById('heroInfoBtn').onclick = () => { openDetail(v); };
+  // Genre tags
+  const tagsEl = document.getElementById('heroTags');
+  if (tagsEl) {
+    const tags = getGenreTags(v);
+    tagsEl.innerHTML = tags.length
+      ? tags.map((t,i) => `<span class="hero-tag${i===0?' primary':''}">${t}</span>`).join('')
+      : '';
+  }
 }
 
 function startHeroTimer() {
@@ -903,10 +1142,19 @@ async function buildHomeRows(trending) {
     const id = 'ct_' + def.label.replace(/\W+/g,'_');
     const row = document.createElement('div');
     row.className = 'row';
+    row.dataset.rowlabel = def.label;
     row.innerHTML = `<div class="row-label">${def.label} ${def.badge}</div><div class="ct" id="${id}"></div>`;
     area.appendChild(row);
-    const vids = def.q ? await getSearch(def.q, 10).catch(() => trending.slice(0,8)) : trending;
-    fillTrack(document.getElementById(id), vids, def.progress || null);
+    let vids, prog;
+    if (def.label === 'Continue Watching') {
+      const cwItems = getCWProgress();
+      vids = cwItems.length ? cwItems : trending.slice(0, 8);
+      prog = cwItems.length ? cwItems.map(i => i.pct || 0) : (def.progress || null);
+    } else {
+      vids = def.q ? await getSearch(def.q, 10).catch(() => trending.slice(0,8)) : trending;
+      prog = def.progress || null;
+    }
+    fillTrack(document.getElementById(id), vids, prog);
   }
 }
 
@@ -943,7 +1191,7 @@ function buildTrending(vids) {
   document.getElementById('trendHeroTitle').textContent = vids[0].title;
   const g = document.getElementById('trendGrid');
   g.innerHTML = '';
-  vids.forEach(v => g.appendChild(makeCard(v)));
+  vids.slice(0, 50).forEach(v => g.appendChild(makeSubsCard(v)));
 }
 
 async function trendCat(el, q) {
@@ -951,21 +1199,44 @@ async function trendCat(el, q) {
   el.classList.add('on');
   const g = document.getElementById('trendGrid');
   g.innerHTML = '<div style="grid-column:1/-1;color:#333;font-size:.58rem;padding:8px;">Loading…</div>';
-  const vids = q && apiKey ? await getSearch(q, 20).catch(() => cachedTrending) : cachedTrending;
+  const vids = q && apiKey ? await getSearch(q, 50).catch(() => cachedTrending) : cachedTrending;
   g.innerHTML = '';
-  vids.forEach(v => g.appendChild(makeCard(v)));
+  vids.slice(0, 50).forEach(v => g.appendChild(makeSubsCard(v)));
 }
 
 // ════════════════════════════════
 // SUBSCRIPTIONS PAGE
 // ════════════════════════════════
+function makeSubsCard(v) {
+  const c = document.createElement('div');
+  c.className = 'subs-card';
+  c.innerHTML = `
+    <div class="subs-thumb">
+      <img src="${v.thumbH || v.thumb}" alt="" loading="lazy" onerror="this.parentNode.style.background='var(--card)'">
+      <div class="subs-play-ov"><span class="material-symbols-rounded">play_arrow</span></div>
+    </div>
+    <div class="subs-card-meta">
+      <div class="subs-card-title">${esc(v.title)}</div>
+      <div class="subs-card-channel">${esc(v.channel)}</div>
+    </div>`;
+  c.onclick = () => openDetail(v);
+  return c;
+}
+
+function fillSubsGrid(g, vids) {
+  g.innerHTML = '';
+  vids.slice(0, 50).forEach(v => g.appendChild(makeSubsCard(v)));
+  const sub = document.getElementById('subsSub');
+  if (sub) sub.textContent = Math.min(vids.length, 50) + ' videos';
+}
+
 function buildSubs(vids) {
   const strip = document.getElementById('chStrip');
   const allPill = strip.querySelector('.ch-pill');
   strip.innerHTML = '';
   strip.appendChild(allPill);
-  const chans = [...new Set(vids.map(v => v.channel))].slice(0, 8);
-  const colors = ['#e50914','#0070d1','#46d369','#9147ff','#ff6b35','#f5a623','#1db954','#e91e8c'];
+  const chans = [...new Set(vids.map(v => v.channel))].slice(0, 10);
+  const colors = ['#e50914','#0070d1','#46d369','#9147ff','#ff6b35','#f5a623','#1db954','#e91e8c','#ff4081','#00bcd4'];
   chans.forEach((ch, i) => {
     const init = ch.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
     const pill = document.createElement('div');
@@ -975,25 +1246,22 @@ function buildSubs(vids) {
     pill.innerHTML = `<div class="ch-av" style="background:${colors[i%colors.length]}">${init}</div><div class="ch-nm">${ch.length>9?ch.slice(0,8)+'…':ch}</div>${Math.random()>.5?'<div class="ch-dot"></div>':''}`;
     strip.appendChild(pill);
   });
-  const g = document.getElementById('subsGrid');
-  g.innerHTML = '';
-  vids.forEach(v => g.appendChild(makeCard(v)));
+  fillSubsGrid(document.getElementById('subsGrid'), vids);
 }
 
 function filterCh(el, ch) {
   document.querySelectorAll('.ch-pill').forEach(p => p.classList.remove('on'));
   el.classList.add('on');
   const g = document.getElementById('subsGrid');
-  g.innerHTML = '';
   const vids = ch ? cachedTrending.filter(v => v.channel === ch) : cachedTrending;
-  (vids.length ? vids : cachedTrending).forEach(v => g.appendChild(makeCard(v)));
+  fillSubsGrid(g, vids.length ? vids : cachedTrending);
 }
 
 // ════════════════════════════════
 // HISTORY PAGE
 // ════════════════════════════════
 function buildHistory(vids) {
-  histItems = vids.slice(0, 16);
+  histItems = vids.slice(0, 50);
   renderHistory();
   document.getElementById('histSub').textContent = histItems.length + ' videos watched';
 }
@@ -1001,19 +1269,11 @@ function buildHistory(vids) {
 function renderHistory() {
   const g = document.getElementById('histGrid');
   g.innerHTML = '';
-  const groups = [
-    {lbl:'Today',     vids: histItems.slice(0,6)},
-    {lbl:'Yesterday', vids: histItems.slice(6,11)},
-    {lbl:'Earlier',   vids: histItems.slice(11)},
-  ];
-  groups.forEach(grp => {
-    if (!grp.vids.length) return;
-    const lbl = document.createElement('div');
-    lbl.className = 'date-grp';
-    lbl.textContent = grp.lbl;
-    g.appendChild(lbl);
-    grp.vids.forEach((v,i) => g.appendChild(makeCard(v, i < 3 ? [62,30,85][i] : null)));
-  });
+  if (!histItems.length) {
+    g.innerHTML = '<div style="grid-column:1/-1;color:#444;font-size:.6rem;padding:14px 0;text-align:center;">No watch history yet.</div>';
+    return;
+  }
+  histItems.forEach(v => g.appendChild(makeSubsCard(v)));
 }
 
 function clearHist() {
@@ -1024,25 +1284,76 @@ function clearHist() {
 }
 
 // ════════════════════════════════
-// WATCHLIST
+// PLAYLISTS
 // ════════════════════════════════
 function saveToWatchlist() {
-  if (!currentDetailVideo) return;
-  if (watchlist.find(w => w.videoId === currentDetailVideo.videoId)) return;
-  watchlist.push(currentDetailVideo);
-  updateWatchlist();
+  // kept for compat — no-op now that page shows playlists
 }
 
 function updateWatchlist() {
+  loadPlaylists();
+}
+
+function makePlCard(pl) {
+  const c = document.createElement('div');
+  c.className = 'subs-card';
+  const thumb = pl.snippet?.thumbnails?.high?.url || pl.snippet?.thumbnails?.medium?.url || pl.snippet?.thumbnails?.default?.url || '';
+  const title = pl.snippet?.title || 'Untitled Playlist';
+  const count = pl.contentDetails?.itemCount ?? '';
+  c.innerHTML = `
+    <div class="subs-thumb" style="position:relative;">
+      <img src="${thumb}" alt="" loading="lazy" onerror="this.parentNode.style.background='var(--card)'">
+      <div class="subs-play-ov"><span class="material-symbols-rounded">playlist_play</span></div>
+      ${count !== '' ? `<div style="position:absolute;bottom:6px;right:8px;background:rgba(0,0,0,.75);color:#fff;font-size:.55rem;padding:2px 6px;border-radius:3px;">${count} videos</div>` : ''}
+    </div>
+    <div class="subs-card-meta">
+      <div class="subs-card-title">${esc(title)}</div>
+      <div class="subs-card-channel">${esc(pl.snippet?.channelTitle || '')}</div>
+    </div>`;
+  c.onclick = () => window.open('https://www.youtube.com/playlist?list=' + pl.id, '_blank');
+  return c;
+}
+
+async function loadPlaylists() {
   const empty = document.getElementById('wlEmpty');
   const grid  = document.getElementById('wlGrid');
   const sub   = document.getElementById('wlSub');
-  sub.textContent = watchlist.length + ' saved video' + (watchlist.length !== 1 ? 's' : '');
-  if (!watchlist.length) { empty.style.display='flex'; grid.style.display='none'; return; }
+
+  if (!currentUser) {
+    sub.textContent = 'Sign in to see your playlists';
+    empty.style.display = 'flex';
+    grid.style.display = 'none';
+    return;
+  }
+
+  sub.textContent = 'Loading…';
   empty.style.display = 'none';
-  grid.style.display = 'grid';
-  grid.innerHTML = '';
-  watchlist.forEach(v => grid.appendChild(makeCard(v)));
+  grid.style.display = 'none';
+
+  try {
+    const res = await fetch(
+      `${BASE}/playlists?part=snippet,contentDetails&mine=true&maxResults=50`,
+      { headers: { Authorization: 'Bearer ' + currentUser.accessToken } }
+    );
+    const data = await res.json();
+    const items = data.items || [];
+
+    if (!items.length) {
+      sub.textContent = '0 playlists';
+      empty.querySelector('p').textContent = 'No playlists found';
+      empty.style.display = 'flex';
+      return;
+    }
+
+    sub.textContent = items.length + ' playlist' + (items.length !== 1 ? 's' : '');
+    grid.innerHTML = '';
+    items.forEach(pl => grid.appendChild(makePlCard(pl)));
+    grid.style.display = 'grid';
+  } catch(e) {
+    sub.textContent = 'Failed to load playlists';
+    empty.querySelector('p').textContent = 'Could not load playlists';
+    empty.style.display = 'flex';
+  }
 }
 
 // ════════════════════════════════
@@ -1050,6 +1361,9 @@ function updateWatchlist() {
 // ════════════════════════════════
 function openDetail(v) {
   currentDetailVideo = v;
+  // Record as started (preserve existing progress if any)
+  const existingPct = getCWProgress().find(i => i.videoId === v.videoId)?.pct;
+  recordWatched(v, existingPct != null ? existingPct : 8);
   document.getElementById('vdImg').src = th(v);
   document.getElementById('vdTitle').textContent = v.title;
   document.getElementById('vdDesc').textContent = v.desc || 'No description available.';
@@ -1100,6 +1414,7 @@ function toggleDesc() {
 function openPlayer(v) {
   document.getElementById('playerTitle').textContent = v.title || 'Now Playing';
   document.getElementById('playerThumb').src = th(v);
+  startProgressTracking(v);
   goPage('player');
 }
 
@@ -1143,16 +1458,10 @@ async function doSearch() {
   document.getElementById('searchLbl').textContent = 'Searching…';
   document.getElementById('searchGrid').innerHTML = '';
   try {
-    const vids = await getSearch(searchText, 12);
+    const vids = await getSearch(searchText, 30);
     document.getElementById('searchLbl').textContent = vids.length + ' results for "' + searchText + '"';
     const g = document.getElementById('searchGrid');
-    vids.forEach((v,i) => {
-      const rc = document.createElement('div');
-      rc.className = 'rc' + (i===0?' foc':'');
-      rc.onclick = () => openDetail(v);
-      rc.innerHTML = `<div class="rth"><img src="${v.thumb}" alt="" loading="lazy" onerror="this.style.display='none'"></div><div class="rtitle">${esc(v.title)}</div>`;
-      g.appendChild(rc);
-    });
+    vids.forEach(v => g.appendChild(makeSubsCard(v)));
   } catch(e) {
     document.getElementById('searchLbl').textContent = 'Search failed — check API key';
   }
@@ -1191,8 +1500,13 @@ const DEFAULT_API_KEY = 'AIzaSyDb_DqBsYPpOvH42cfnM0zCg_PxiScvfqM';
 
 // ── Show login screen on first load ──
 window.addEventListener('DOMContentLoaded', () => {
-  // Pre-fill API key input
-  document.getElementById('apiKeyInput').value = DEFAULT_API_KEY;
+  loadSettings(); // Restore saved theme and API key
+  // Pre-fill API key if not already restored from settings
+  if (!document.getElementById('apiKeyInput').value) {
+    document.getElementById('apiKeyInput').value = DEFAULT_API_KEY;
+  }
+  // Sync settings page API key field
+  document.getElementById('settApiKey').value = document.getElementById('apiKeyInput').value;
 
   // Check for OAuth redirect token in URL hash
   const hash = new URLSearchParams(window.location.hash.replace('#',''));
@@ -1237,7 +1551,7 @@ function signInWithGoogle() {
   }
   const params = new URLSearchParams({
     client_id:     GOOGLE_CLIENT_ID,
-    redirect_uri:  window.location.origin + window.location.pathname,
+    redirect_uri:  window.location.origin,
     response_type: 'token',
     scope:         OAUTH_SCOPES,
     include_granted_scopes: 'true',
@@ -1443,6 +1757,164 @@ function showOAuthSetupModal() {
       <button onclick="this.closest('div[style]').remove()" style="width:100%;padding:8px;background:var(--red);color:#fff;border:none;border-radius:6px;font-size:.65rem;font-weight:700;cursor:pointer;">Got It</button>
     </div>`;
   document.body.appendChild(modal);
+}
+
+// ════════════════════════════════
+// CONTINUE WATCHING — localStorage
+// ════════════════════════════════
+const CW_KEY = 'tubemax_cw';
+
+function getCWProgress() {
+  try { return JSON.parse(localStorage.getItem(CW_KEY) || '[]'); }
+  catch(e) { return []; }
+}
+
+function saveCWProgress(items) {
+  localStorage.setItem(CW_KEY, JSON.stringify(items.slice(0, 20)));
+}
+
+function recordWatched(v, pct) {
+  if (!document.getElementById('cwEnabledToggle')?.checked) return;
+  const items = getCWProgress();
+  const idx = items.findIndex(i => i.videoId === v.videoId);
+  const entry = {
+    videoId: v.videoId, title: v.title, thumb: v.thumb,
+    thumbH: v.thumbH || '', channel: v.channel, desc: v.desc || '',
+    pct: Math.min(Math.round(pct), 99), ts: Date.now()
+  };
+  if (idx >= 0) items[idx] = entry;
+  else items.unshift(entry);
+  saveCWProgress(items.sort((a,b) => b.ts - a.ts));
+}
+
+function clearCWProgress() {
+  localStorage.removeItem(CW_KEY);
+  // Rebuild CW row with trending fallback
+  const cwEl = document.getElementById('ct_Continue_Watching');
+  if (cwEl) {
+    cwEl.innerHTML = '';
+    if (cachedTrending.length) fillTrack(cwEl, cachedTrending.slice(0,8), null);
+  }
+}
+
+// Simulate playback progress while in player
+let playerProgressInterval = null;
+let playerProgressPct = 0;
+let playerCurrentVideo = null;
+
+function startProgressTracking(v) {
+  stopProgressTracking();
+  playerCurrentVideo = v;
+  const existing = getCWProgress().find(i => i.videoId === v.videoId);
+  playerProgressPct = existing ? existing.pct : 5;
+  recordWatched(v, playerProgressPct);
+  // Update pfill visual to match saved progress
+  const fill = document.querySelector('.pfill');
+  if (fill) fill.style.width = playerProgressPct + '%';
+  playerProgressInterval = setInterval(() => {
+    playerProgressPct = Math.min(playerProgressPct + 0.6, 99);
+    recordWatched(playerCurrentVideo, playerProgressPct);
+    const f = document.querySelector('.pfill');
+    if (f) f.style.width = playerProgressPct + '%';
+  }, 2000);
+}
+
+function stopProgressTracking() {
+  if (playerProgressInterval) { clearInterval(playerProgressInterval); playerProgressInterval = null; }
+}
+
+// ════════════════════════════════
+// HERO GENRE TAGS
+// ════════════════════════════════
+function getGenreTags(v) {
+  const text = ((v.title||'') + ' ' + (v.channel||'') + ' ' + (v.desc||'')).toLowerCase();
+  const checks = [
+    ['Music',   /\b(music|song|feat\.|ft\.|album|official music|lyric|audio|mv)\b/],
+    ['Gaming',  /\b(gaming|gameplay|playthrough|let[''']s play|gamer|stream)\b/],
+    ['Sports',  /\b(sports?|nba|nfl|soccer|football|basketball|highlights?|match)\b/],
+    ['News',    /\b(news|breaking|today|report|update)\b/],
+    ['Tech',    /\b(tech|technology|\bai\b|phone|review|tutorial|coding|programming)\b/],
+    ['Comedy',  /\b(comedy|funny|laugh|meme|prank|skit|humor)\b/],
+    ['Film',    /\b(movie|film|trailer|official trailer|cinema|documentary)\b/],
+    ['Fitness', /\b(workout|fitness|gym|exercise|yoga|health)\b/],
+    ['Travel',  /\b(travel|vlog|tour|adventure|explore)\b/],
+  ];
+  const tags = [];
+  for (const [label, rx] of checks) {
+    if (rx.test(text)) tags.push(label);
+    if (tags.length >= 3) break;
+  }
+  return tags;
+}
+
+// ════════════════════════════════
+// SETTINGS
+// ════════════════════════════════
+let settAutoRotate = true;
+
+function saveApiKeySett() {
+  const key = document.getElementById('settApiKey').value.trim();
+  if (!key) return;
+  apiKey = key;
+  document.getElementById('apiKeyInput').value = key;
+  localStorage.setItem('tubemax_apikey', key);
+  const st = document.getElementById('settApiSt');
+  st.style.color = '#46d369'; st.textContent = '✓ API key saved — reloading data…';
+  loadAll().then(() => { st.textContent = '✓ API key saved · Live data loaded'; });
+}
+
+function toggleSettApiVis(btn) {
+  const inp = document.getElementById('settApiKey');
+  if (inp.type === 'password') { inp.type = 'text'; btn.textContent = 'Hide'; }
+  else { inp.type = 'password'; btn.textContent = 'Show'; }
+}
+
+function applyTheme(light) {
+  document.body.classList.toggle('light', light);
+  localStorage.setItem('tubemax_theme', light ? 'light' : 'dark');
+}
+
+function loadSettings() {
+  const savedKey = localStorage.getItem('tubemax_apikey');
+  if (savedKey) {
+    apiKey = savedKey;
+    document.getElementById('apiKeyInput').value = savedKey;
+  }
+  const theme = localStorage.getItem('tubemax_theme');
+  if (theme === 'light') {
+    document.body.classList.add('light');
+    const tog = document.getElementById('lightModeToggle');
+    if (tog) tog.checked = true;
+  }
+}
+
+// ════════════════════════════════
+// CATEGORY FILTER BAR
+// ════════════════════════════════
+const CAT_MAP = {
+  music:   ['Music Videos'],
+  gaming:  ['Gaming'],
+  sports:  ['Sports'],
+  news:    ['News'],
+  tech:    ['Tech & Science'],
+  movies:  ['Movies'],
+  comedy:  ['Comedy', 'Short Films'],
+};
+
+function filterHomeCategory(el, cat) {
+  document.querySelectorAll('.cat-pill').forEach(p => p.classList.remove('on'));
+  el.classList.add('on');
+  document.querySelectorAll('#rowsArea .row').forEach(row => {
+    const rl = row.dataset.rowlabel || '';
+    if (cat === 'all') {
+      row.style.display = '';
+    } else {
+      const allowed = CAT_MAP[cat] || [];
+      const match = allowed.some(c => rl.toLowerCase() === c.toLowerCase());
+      const isCW = rl === 'Continue Watching';
+      row.style.display = (match || isCW) ? '' : 'none';
+    }
+  });
 }
 
 // Initialize auth UI on load

@@ -70,7 +70,9 @@ sub onVideosLoaded()
 
         if videoId <> "" and videoId <> invalid
             thumb = ""
-            if item.snippet.thumbnails.medium <> invalid
+            if item.snippet.thumbnails.high <> invalid
+                thumb = item.snippet.thumbnails.high.url
+            else if item.snippet.thumbnails.medium <> invalid
                 thumb = item.snippet.thumbnails.medium.url
             else if item.snippet.thumbnails.default <> invalid
                 thumb = item.snippet.thumbnails.default.url
@@ -108,43 +110,53 @@ function buildCard(data as object, index as integer, xPos as integer) as object
     card.id = "card_" + index.toStr()
     card.translation = [xPos, 0]
 
+    ' Focus border — appended FIRST so it renders behind thumbnail
+    border = createObject("roSGNode", "Rectangle")
+    border.id = "focusBorder"
+    border.width = m.cardWidth + 8
+    border.height = 178
+    border.translation = [-4, -4]
+    border.color = "0xE50914FF"
+    border.cornerRadius = 9
+    border.visible = false
+    card.appendChild(border)
+
     ' Thumbnail background
     bg = createObject("roSGNode", "Rectangle")
     bg.id = "cardBg"
     bg.width = m.cardWidth
     bg.height = 170
-    bg.color = "0x2A2A2AFF"
+    bg.color = "0x1E1E1EFF"
     bg.cornerRadius = 6
     card.appendChild(bg)
 
     ' Thumbnail image
     if data.thumb <> "" and data.thumb <> invalid
         poster = createObject("roSGNode", "Poster")
+        poster.id = "cardPoster"
         poster.uri = data.thumb
         poster.width = m.cardWidth
         poster.height = 170
+        poster.loadDisplayMode = "scaleToZoom"
         card.appendChild(poster)
     end if
 
-    ' Focus border (hidden by default)
-    border = createObject("roSGNode", "Rectangle")
-    border.id = "focusBorder"
-    border.width = m.cardWidth + 6
-    border.height = 176
-    border.translation = [-3, -3]
-    border.color = "0xE50914FF"
-    border.cornerRadius = 8
-    border.visible = false
-    card.appendChild(border)
+    ' Bottom title scrim — subtle dark gradient at card bottom
+    scrim = createObject("roSGNode", "Rectangle")
+    scrim.width = m.cardWidth
+    scrim.height = 60
+    scrim.translation = [0, 110]
+    scrim.color = "0x000000BB"
+    card.appendChild(scrim)
 
     ' Title label
     titleLabel = createObject("roSGNode", "Label")
     titleLabel.id = "cardTitle"
     titleLabel.text = data.title
-    titleLabel.translation = [0, 178]
+    titleLabel.translation = [0, 176]
     titleLabel.width = m.cardWidth
     titleLabel.wrap = true
-    titleLabel.color = "0xFFFFFFFF"
+    titleLabel.color = "0xE5E5E5FF"
     titleLabel.font = "font:SmallSystemFont"
     card.appendChild(titleLabel)
 
@@ -152,7 +164,8 @@ function buildCard(data as object, index as integer, xPos as integer) as object
     chanLabel = createObject("roSGNode", "Label")
     chanLabel.id = "cardChannel"
     chanLabel.text = data.channel
-    chanLabel.translation = [0, 208]
+    chanLabel.translation = [0, 204]
+    chanLabel.width = m.cardWidth
     chanLabel.color = "0x808080FF"
     chanLabel.font = "font:SmallSystemFont"
     card.appendChild(chanLabel)

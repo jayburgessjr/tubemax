@@ -10,31 +10,26 @@
 
   <children>
 
-    <!-- Hero Backdrop -->
+    <!-- Hero Backdrop — full brightness -->
     <Poster
       id="heroThumb"
       width="1920"
       height="430"
       scaleRotateCenter="[960, 215]"
-      blendColor="0xFFFFFF99"
+      blendColor="0xFFFFFFFF"
+      loadDisplayMode="scaleToZoom"
     />
 
-    <!-- Gradient Overlay (bottom fade to black) -->
-    <Rectangle
-      id="gradientOverlay"
-      width="1920"
-      height="430"
-      color="0x00000000"
-    />
+    <!-- Bottom fade: stacked semi-transparent rects simulate gradient -->
+    <Rectangle width="1920" height="80"  color="0x14141400" translation="[0, 200]" />
+    <Rectangle width="1920" height="80"  color="0x14141466" translation="[0, 280]" />
+    <Rectangle width="1920" height="70"  color="0x141414BB" translation="[0, 360]" />
+    <Rectangle width="1920" height="80"  color="0x141414FF" translation="[0, 395]" />
 
-    <!-- Left gradient overlay -->
-    <Rectangle
-      id="leftOverlay"
-      width="700"
-      height="430"
-      color="0x141414FF"
-      opacity="0.7"
-    />
+    <!-- Left fade: layered for depth -->
+    <Rectangle width="500" height="430" color="0x141414EE" translation="[0,   0]" />
+    <Rectangle width="300" height="430" color="0x14141499" translation="[500, 0]" />
+    <Rectangle width="200" height="430" color="0x14141444" translation="[800, 0]" />
 
     <!-- Hero Content -->
     <Group id="heroContent" translation="[80, 80]">
@@ -92,8 +87,8 @@
         />
         <Label
           id="playBtnLabel"
-          text="▶  Play"
-          translation="[30, 14]"
+          text="Play"
+          translation="[50, 14]"
           color="0x141414FF"
           font="font:MediumBoldSystemFont"
         />
@@ -101,16 +96,16 @@
         <!-- More Info Button -->
         <Rectangle
           id="infoBtn"
-          width="180"
+          width="190"
           height="52"
-          color="0x6D6D6DBB"
+          color="0x4D4D4DAA"
           cornerRadius="6"
-          translation="[175, 0]"
+          translation="[176, 0]"
         />
         <Label
           id="infoBtnLabel"
-          text="ⓘ  More Info"
-          translation="[200, 14]"
+          text="More Info"
+          translation="[216, 14]"
           color="0xFFFFFFFF"
           font="font:MediumBoldSystemFont"
         />
