@@ -216,15 +216,27 @@ sub onSearchVideoSelected()
 end sub
 
 sub navigateToPlayer(videoId as string, title as string)
-    buildPlayerScreen(videoId, title)
-    showScreen("player")
-    player = m.playerScreen.findNode("videoPlayer")
-    if player <> invalid then player.setFocus(true)
+    ' Deep link into the official YouTube Roku channel (ID 2285)
+    ' User selects a video in TubeMax → YouTube app opens and plays it
+    ' Pressing Back in YouTube returns the user to TubeMax
+    appManager = CreateObject("roAppManager")
+    launched = appManager.LaunchApp({
+        id:     "2285",
+        params: {
+            contentid: videoId,
+            mediatype: "episode"
+        }
+    })
+
+    if not launched
+        ' YouTube app not installed — show a toast
+        showToast("Install the YouTube app to watch videos")
+    end if
 end sub
 
 sub onPlayerClosed()
+    ' Called if our internal player ever closes — return home
     showScreen("home")
-    ' Restore focus: return to hero
     focusHero()
 end sub
 
