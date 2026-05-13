@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<component name="ApiTask" extends="Task">
+
+  <script type="text/brightscript" uri="pkg:/components/ApiTask.brs" />
+
+  <interface>
+    <field id="apiKey"   type="string"     value="" />
+    <field id="endpoint" type="string"     value="" />
+    <field id="params"   type="assocarray" />
+    <field id="result"   type="assocarray" />
+  </interface>
+
+</component>

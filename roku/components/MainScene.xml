@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<component name="MainScene" extends="Scene" initialFocus="homeScreen">
+
+  <script type="text/brightscript" uri="pkg:/source/utils.brs" />
+  <script type="text/brightscript" uri="pkg:/source/MainScene.brs" />
+
+  <children>
+
+    <!-- Background -->
+    <Rectangle
+      id="bgRect"
+      width="1920"
+      height="1080"
+      color="0x141414FF"
+    />
+
+    <!-- Home Screen -->
+    <Group id="homeScreen" visible="true" />
+
+    <!-- Player Screen -->
+    <Group id="playerScreen" visible="false" />
+
+    <!-- Search Screen -->
+    <Group id="searchScreen" visible="false" />
+
+    <!-- Loading Overlay -->
+    <Group id="loadingOverlay" visible="false">
+      <Rectangle width="1920" height="1080" color="0x141414CC" />
+      <Label
+        id="loadingLabel"
+        text="Loading..."
+        font="font:LargeBoldSystemFont"
+        color="0xE5E5E5FF"
+        horizAlign="center"
+        vertAlign="center"
+        width="1920"
+        height="1080"
+      />
+    </Group>
+
+    <!-- Toast Message -->
+    <Group id="toastGroup" visible="false">
+      <Rectangle id="toastBg" color="0xE50914FF" cornerRadius="8" />
+      <Label id="toastLabel" color="0xFFFFFFFF" font="font:MediumBoldSystemFont" />
+    </Group>
+
+  </children>
+
+</component>

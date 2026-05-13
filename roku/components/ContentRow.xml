@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<component name="ContentRow" extends="Group">
+
+  <script type="text/brightscript" uri="pkg:/components/ContentRow.brs" />
+
+  <interface>
+    <field id="rowLabel"      type="string"     value=""  onChange="onLabelSet" />
+    <field id="queryString"   type="string"     value=""  />
+    <field id="queryType"     type="string"     value="search" />
+    <field id="apiKey"        type="string"     value=""  onChange="onApiKeySet" />
+    <field id="videoSelected" type="assocarray" />
+    <field id="hasFocus"      type="boolean"    value="false" onChange="onFocusChange" />
+  </interface>
+
+  <children>
+
+    <!-- Row Label -->
+    <Label
+      id="rowTitle"
+      text=""
+      translation="[80, 0]"
+      color="0xFFFFFFFF"
+      font="font:MediumBoldSystemFont"
+    />
+
+    <!-- Cards Container (horizontal scroll) -->
+    <Group id="cardsGroup" translation="[80, 40]" />
+
+    <!-- Loading Indicator -->
+    <Label
+      id="loadingLabel"
+      text="Loading..."
+      translation="[80, 50]"
+      color="0x808080FF"
+      font="font:SmallSystemFont"
+      visible="true"
+    />
+
+  </children>
+
+</component>

@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<component name="HeroBanner" extends="Group">
+
+  <script type="text/brightscript" uri="pkg:/components/HeroBanner.brs" />
+
+  <interface>
+    <field id="apiKey"        type="string"  value="" onChange="onApiKeySet" />
+    <field id="videoSelected" type="assocarray" />
+  </interface>
+
+  <children>
+
+    <!-- Hero Backdrop -->
+    <Poster
+      id="heroThumb"
+      width="1920"
+      height="430"
+      scaleRotateCenter="[960, 215]"
+      blendColor="0xFFFFFF99"
+    />
+
+    <!-- Gradient Overlay (bottom fade to black) -->
+    <Rectangle
+      id="gradientOverlay"
+      width="1920"
+      height="430"
+      color="0x00000000"
+    />
+
+    <!-- Left gradient overlay -->
+    <Rectangle
+      id="leftOverlay"
+      width="700"
+      height="430"
+      color="0x141414FF"
+      opacity="0.7"
+    />
+
+    <!-- Hero Content -->
+    <Group id="heroContent" translation="[80, 80]">
+
+      <!-- Genre Badge -->
+      <Rectangle
+        id="genreBadge"
+        color="0xE50914FF"
+        width="120"
+        height="32"
+        cornerRadius="4"
+        translation="[0, 0]"
+      />
+      <Label
+        id="genreLabel"
+        text="FEATURED"
+        translation="[10, 6]"
+        color="0xFFFFFFFF"
+        font="font:SmallBoldSystemFont"
+      />
+
+      <!-- Title -->
+      <Label
+        id="heroTitle"
+        text="Loading..."
+        translation="[0, 50]"
+        width="700"
+        wrap="true"
+        color="0xFFFFFFFF"
+        font="font:LargeBoldSystemFont"
+      />
+
+      <!-- Description -->
+      <Label
+        id="heroDesc"
+        text=""
+        translation="[0, 160]"
+        width="600"
+        wrap="true"
+        color="0xB3B3B3FF"
+        font="font:SmallSystemFont"
+      />
+
+      <!-- Buttons Row -->
+      <Group id="btnGroup" translation="[0, 260]">
+
+        <!-- Play Button -->
+        <Rectangle
+          id="playBtn"
+          width="160"
+          height="52"
+          color="0xFFFFFFFF"
+          cornerRadius="6"
+          translation="[0, 0]"
+        />
+        <Label
+          id="playBtnLabel"
+          text="▶  Play"
+          translation="[30, 14]"
+          color="0x141414FF"
+          font="font:MediumBoldSystemFont"
+        />
+
+        <!-- More Info Button -->
+        <Rectangle
+          id="infoBtn"
+          width="180"
+          height="52"
+          color="0x6D6D6DBB"
+          cornerRadius="6"
+          translation="[175, 0]"
+        />
+        <Label
+          id="infoBtnLabel"
+          text="ⓘ  More Info"
+          translation="[200, 14]"
+          color="0xFFFFFFFF"
+          font="font:MediumBoldSystemFont"
+        />
+
+      </Group>
+
+    </Group>
+
+  </children>
+
+</component>

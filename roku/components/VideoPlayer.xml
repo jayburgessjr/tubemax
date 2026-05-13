@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<component name="VideoPlayer" extends="Group">
+
+  <script type="text/brightscript" uri="pkg:/components/VideoPlayer.brs" />
+
+  <interface>
+    <field id="videoId"      type="string" value="" onChange="onVideoIdSet" />
+    <field id="videoTitle"   type="string" value="" />
+    <field id="apiKey"       type="string" value="" />
+    <field id="playerClosed" type="boolean" value="false" />
+  </interface>
+
+  <children>
+
+    <!-- Full-screen black bg -->
+    <Rectangle
+      id="playerBg"
+      width="1920"
+      height="1080"
+      color="0x000000FF"
+    />
+
+    <!-- Video Node -->
+    <Video
+      id="videoNode"
+      width="1920"
+      height="1080"
+      translation="[0, 0]"
+    />
+
+    <!-- Custom OSD Overlay -->
+    <Group id="osdOverlay" visible="false">
+
+      <!-- OSD Background gradient -->
+      <Rectangle
+        id="osdBg"
+        width="1920"
+        height="180"
+        color="0x000000CC"
+        translation="[0, 900]"
+      />
+
+      <!-- Title -->
+      <Label
+        id="osdTitle"
+        text=""
+        translation="[80, 920]"
+        color="0xFFFFFFFF"
+        font="font:MediumBoldSystemFont"
+        width="1200"
+        wrap="false"
+      />
+
+      <!-- Progress Bar Background -->
+      <Rectangle
+        id="progressBg"
+        width="1760"
+        height="4"
+        color="0x4D4D4DFF"
+        translation="[80, 970]"
+      />
+
+      <!-- Progress Bar Fill -->
+      <Rectangle
+        id="progressFill"
+        width="0"
+        height="4"
+        color="0xE50914FF"
+        translation="[80, 970]"
+      />
+
+      <!-- Progress Dot -->
+      <Rectangle
+        id="progressDot"
+        width="14"
+        height="14"
+        color="0xE50914FF"
+        cornerRadius="7"
+        translation="[74, 964]"
+      />
+
+      <!-- Time Labels -->
+      <Label
+        id="currentTime"
+        text="0:00"
+        translation="[80, 985]"
+        color="0xFFFFFFFF"
+        font="font:SmallSystemFont"
+      />
+      <Label
+        id="totalTime"
+        text="0:00"
+        translation="[1800, 985]"
+        color="0x808080FF"
+        font="font:SmallSystemFont"
+      />
+
+      <!-- Control Buttons Row -->
+      <Group id="controls" translation="[860, 1030]">
+        <Label id="btnRewind"  text="⏮"  translation="[-100, 0]" color="0xFFFFFFFF" font="font:LargeBoldSystemFont" />
+        <Label id="btnPlay"    text="⏸"  translation="[0,    0]" color="0xFFFFFFFF" font="font:LargeBoldSystemFont" />
+        <Label id="btnForward" text="⏭"  translation="[100,  0]" color="0xFFFFFFFF" font="font:LargeBoldSystemFont" />
+      </Group>
+
+    </Group>
+
+    <!-- Error Screen -->
+    <Group id="errorScreen" visible="false">
+      <Rectangle width="1920" height="1080" color="0x141414FF" />
+      <Label
+        id="errorLabel"
+        text="Unable to play this video."
+        translation="[760, 490]"
+        color="0xFFFFFFFF"
+        font="font:LargeBoldSystemFont"
+      />
+      <Label
+        text="Press Back to return"
+        translation="[800, 550]"
+        color="0x808080FF"
+        font="font:MediumSystemFont"
+      />
+    </Group>
+
+  </children>
+
+</component>

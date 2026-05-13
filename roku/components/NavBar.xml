@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<component name="NavBar" extends="Group">
+
+  <script type="text/brightscript" uri="pkg:/components/NavBar.brs" />
+
+  <interface>
+    <field id="activeTab" type="string" value="Home" onChange="onActiveTabChange" />
+  </interface>
+
+  <children>
+
+    <!-- Nav Background gradient -->
+    <Rectangle
+      id="navBg"
+      width="1920"
+      height="108"
+      color="0x141414FF"
+    />
+
+    <!-- TubeMax Logo -->
+    <Label
+      id="logoLabel"
+      text="TUBEMAX"
+      translation="[80, 36]"
+      color="0xE50914FF"
+      font="font:LargeBoldSystemFont"
+    />
+
+    <!-- Nav Items -->
+    <Group id="navItems" translation="[320, 40]">
+      <Label id="tab_Home"     text="Home"      translation="[0,   0]" color="0xFFFFFFFF" font="font:MediumBoldSystemFont" />
+      <Label id="tab_Search"   text="Search"    translation="[130, 0]" color="0xA0A0A0FF" font="font:MediumSystemFont" />
+      <Label id="tab_Trending" text="Trending"  translation="[280, 0]" color="0xA0A0A0FF" font="font:MediumSystemFont" />
+      <Label id="tab_Watchlist" text="Watchlist" translation="[440, 0]" color="0xA0A0A0FF" font="font:MediumSystemFont" />
+    </Group>
+
+    <!-- Active indicator bar -->
+    <Rectangle
+      id="activeBar"
+      width="60"
+      height="3"
+      color="0xE50914FF"
+      translation="[320, 76]"
+    />
+
+  </children>
+
+</component>

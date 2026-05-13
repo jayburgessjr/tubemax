@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<component name="SearchScreen" extends="Group">
+
+  <script type="text/brightscript" uri="pkg:/components/SearchScreen.brs" />
+
+  <interface>
+    <field id="apiKey"        type="string" value="" />
+    <field id="videoSelected" type="assocarray" />
+    <field id="searchClosed"  type="boolean" value="false" />
+  </interface>
+
+  <children>
+
+    <!-- Dark Background -->
+    <Rectangle
+      id="searchBg"
+      width="1920"
+      height="1080"
+      color="0x141414FF"
+    />
+
+    <!-- Header -->
+    <Label
+      text="SEARCH"
+      translation="[80, 60]"
+      color="0xE50914FF"
+      font="font:LargeBoldSystemFont"
+    />
+
+    <!-- Search Input Box -->
+    <Rectangle
+      id="searchBox"
+      width="700"
+      height="64"
+      color="0x2A2A2AFF"
+      cornerRadius="8"
+      translation="[80, 140]"
+    />
+    <Rectangle
+      id="searchBoxBorder"
+      width="706"
+      height="70"
+      color="0xE50914FF"
+      cornerRadius="10"
+      translation="[77, 137]"
+    />
+    <Label
+      id="searchInput"
+      text=""
+      translation="[110, 156]"
+      color="0xFFFFFFFF"
+      font="font:MediumSystemFont"
+    />
+    <Label
+      id="searchPlaceholder"
+      text="Search YouTube..."
+      translation="[110, 156]"
+      color="0x808080FF"
+      font="font:MediumSystemFont"
+    />
+    <Label
+      id="searchCursor"
+      text="|"
+      translation="[110, 156]"
+      color="0xE50914FF"
+      font="font:MediumBoldSystemFont"
+    />
+
+    <!-- Keyboard -->
+    <Group id="keyboard" translation="[80, 230]" />
+
+    <!-- Results Label -->
+    <Label
+      id="resultsLabel"
+      text=""
+      translation="[820, 140]"
+      color="0x808080FF"
+      font="font:SmallSystemFont"
+    />
+
+    <!-- Results Grid -->
+    <Group id="resultsGroup" translation="[820, 180]" />
+
+  </children>
+
+</component>
