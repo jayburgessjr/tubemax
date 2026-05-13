@@ -414,7 +414,7 @@ window.addEventListener('DOMContentLoaded', () => {
 function signInWithGoogle() {
   const params = new URLSearchParams({
     client_id:    CLIENT_ID,
-    redirect_uri: window.location.origin + window.location.pathname,
+    redirect_uri: window.location.origin + '/roku-preview.html',
     response_type:'token',
     scope:        SCOPES,
     include_granted_scopes:'true',
