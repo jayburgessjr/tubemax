@@ -9,50 +9,46 @@
 
   <children>
 
-    <!-- Nav solid base -->
-    <Rectangle
-      id="navBg"
-      width="1920"
-      height="100"
-      color="0x0A0A0AFF"
-    />
-    <!-- Nav bottom fade into content -->
-    <Rectangle width="1920" height="20" color="0x0A0A0A99" translation="[0, 100]" />
-    <Rectangle width="1920" height="14" color="0x0A0A0A55" translation="[0, 120]" />
+    <!-- Background -->
+    <Rectangle id="navBg" width="1920" height="72" color="0x080808FF" />
+    <!-- Bottom border -->
+    <Rectangle width="1920" height="1" color="0x1F1F1FFF" translation="[0, 71]" />
 
-    <!-- Red left accent bar -->
+    <!-- TM Logo Mark (red badge) -->
     <Rectangle
-      width="4"
-      height="40"
-      color="0xE50914FF"
-      translation="[68, 30]"
+      width="44" height="30" color="0xE50914FF"
+      cornerRadius="4" translation="[24, 21]"
     />
-
-    <!-- TubeMax Logo -->
     <Label
-      id="logoLabel"
-      text="TUBEMAX"
-      translation="[82, 33]"
+      text="TM"
+      translation="[30, 24]"
       color="0xFFFFFFFF"
-      font="font:LargeBoldSystemFont"
+      font="font:SmallBoldSystemFont"
     />
 
-    <!-- Nav Items -->
-    <Group id="navItems" translation="[360, 38]">
-      <Label id="tab_Home"      text="Home"        translation="[0,   0]" color="0xFFFFFFFF" font="font:MediumBoldSystemFont" />
-      <Label id="tab_Search"    text="Search"      translation="[150, 0]" color="0x808080FF" font="font:MediumSystemFont" />
-      <Label id="tab_Trending"  text="Trending"    translation="[300, 0]" color="0x808080FF" font="font:MediumSystemFont" />
-      <Label id="tab_Watchlist" text="Watchlist"   translation="[470, 0]" color="0x808080FF" font="font:MediumSystemFont" />
+    <!-- App name -->
+    <Label
+      text="TUBEMAX"
+      translation="[78, 22]"
+      color="0xFFFFFFFF"
+      font="font:MediumBoldSystemFont"
+    />
+
+    <!-- Tab labels -->
+    <Group id="navItems" translation="[380, 24]">
+      <Label id="tab_Home"      text="Home"      translation="[0,   0]" color="0xFFFFFFFF" font="font:MediumBoldSystemFont" />
+      <Label id="tab_Search"    text="Search"    translation="[150, 0]" color="0x808080FF" font="font:MediumSystemFont" />
+      <Label id="tab_Trending"  text="Trending"  translation="[300, 0]" color="0x808080FF" font="font:MediumSystemFont" />
+      <Label id="tab_Watchlist" text="Watchlist" translation="[470, 0]" color="0x808080FF" font="font:MediumSystemFont" />
     </Group>
 
-    <!-- Active indicator bar -->
+    <!-- Active tab underline -->
     <Rectangle
       id="activeBar"
-      width="50"
-      height="3"
+      width="46" height="3"
       color="0xE50914FF"
       cornerRadius="2"
-      translation="[360, 68]"
+      translation="[380, 62]"
     />
 
   </children>

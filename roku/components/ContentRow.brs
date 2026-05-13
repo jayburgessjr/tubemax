@@ -114,7 +114,7 @@ function buildCard(data as object, index as integer, xPos as integer) as object
     border = createObject("roSGNode", "Rectangle")
     border.id = "focusBorder"
     border.width = m.cardWidth + 8
-    border.height = 178
+    border.height = 177
     border.translation = [-4, -4]
     border.color = "0xE50914FF"
     border.cornerRadius = 9
@@ -125,7 +125,7 @@ function buildCard(data as object, index as integer, xPos as integer) as object
     bg = createObject("roSGNode", "Rectangle")
     bg.id = "cardBg"
     bg.width = m.cardWidth
-    bg.height = 170
+    bg.height = 169
     bg.color = "0x1E1E1EFF"
     bg.cornerRadius = 6
     card.appendChild(bg)
@@ -136,7 +136,7 @@ function buildCard(data as object, index as integer, xPos as integer) as object
         poster.id = "cardPoster"
         poster.uri = data.thumb
         poster.width = m.cardWidth
-        poster.height = 170
+        poster.height = 169
         poster.loadDisplayMode = "scaleToZoom"
         card.appendChild(poster)
     end if
@@ -145,7 +145,7 @@ function buildCard(data as object, index as integer, xPos as integer) as object
     scrim = createObject("roSGNode", "Rectangle")
     scrim.width = m.cardWidth
     scrim.height = 60
-    scrim.translation = [0, 110]
+    scrim.translation = [0, 109]
     scrim.color = "0x000000BB"
     card.appendChild(scrim)
 
@@ -153,7 +153,7 @@ function buildCard(data as object, index as integer, xPos as integer) as object
     titleLabel = createObject("roSGNode", "Label")
     titleLabel.id = "cardTitle"
     titleLabel.text = data.title
-    titleLabel.translation = [0, 176]
+    titleLabel.translation = [0, 175]
     titleLabel.width = m.cardWidth
     titleLabel.wrap = true
     titleLabel.color = "0xE5E5E5FF"
@@ -164,7 +164,7 @@ function buildCard(data as object, index as integer, xPos as integer) as object
     chanLabel = createObject("roSGNode", "Label")
     chanLabel.id = "cardChannel"
     chanLabel.text = data.channel
-    chanLabel.translation = [0, 204]
+    chanLabel.translation = [0, 201]
     chanLabel.width = m.cardWidth
     chanLabel.color = "0x808080FF"
     chanLabel.font = "font:SmallSystemFont"
@@ -187,9 +187,9 @@ sub updateFocusVisuals()
             end if
             if bg <> invalid
                 if i = m.focusIndex
-                    bg.color = "0x3A3A3AFF"
-                else
                     bg.color = "0x2A2A2AFF"
+                else
+                    bg.color = "0x1E1E1EFF"
                 end if
             end if
         end if
@@ -225,7 +225,7 @@ sub onFocusedChanged()
                 border = card.findNode("focusBorder")
                 if border <> invalid then border.visible = false
                 bg = card.findNode("cardBg")
-                if bg <> invalid then bg.color = "0x2A2A2AFF"
+                if bg <> invalid then bg.color = "0x1E1E1EFF"
             end if
         end for
     end if

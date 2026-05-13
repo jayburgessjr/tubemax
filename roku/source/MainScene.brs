@@ -33,7 +33,7 @@ sub buildHomeScreen()
     ' Hero Banner
     hero = createObject("roSGNode", "HeroBanner")
     hero.id = "heroBanner"
-    hero.translation = [0, 108]
+    hero.translation = [0, 72]
     hero.apiKey = m.apiKey
     hero.observeField("videoSelected", "onHeroVideoSelected")
     m.homeScreen.appendChild(hero)
@@ -41,7 +41,7 @@ sub buildHomeScreen()
     ' Content Rows Container
     rowsGroup = createObject("roSGNode", "Group")
     rowsGroup.id = "rowsGroup"
-    rowsGroup.translation = [0, 540]
+    rowsGroup.translation = [0, 510]
     m.homeScreen.appendChild(rowsGroup)
 
     buildContentRows(rowsGroup)
@@ -75,7 +75,7 @@ sub buildContentRows(parent as object)
         row.apiKey = m.apiKey
         row.observeField("videoSelected", "onRowVideoSelected")
         parent.appendChild(row)
-        yOffset += 220
+        yOffset += 250
     end for
 end sub
 
@@ -117,7 +117,7 @@ sub focusHero()
 
     ' Scroll rows back to default position
     rowsGroup = m.homeScreen.findNode("rowsGroup")
-    if rowsGroup <> invalid then rowsGroup.translation = [0, 540]
+    if rowsGroup <> invalid then rowsGroup.translation = [0, 510]
 end sub
 
 sub focusRow(index as integer)
@@ -148,15 +148,15 @@ sub focusRow(index as integer)
     row.setFocus(true)
 
     ' Scroll rowsGroup so focused row is on screen
-    ' Rows area starts at y=540; each row is 220px; screen height=1080
-    ' Keep focused row top between y=540 and y=800
-    scrollOffset = index * 220
-    targetY = 540
-    if scrollOffset > 160
-        targetY = 540 - (scrollOffset - 160)
+    ' Rows area starts at y=510; each row is 250px; screen height=1080
+    ' Keep focused row top between y=510 and y=800
+    scrollOffset = index * 250
+    targetY = 510
+    if scrollOffset > 200
+        targetY = 510 - (scrollOffset - 200)
     end if
     ' Never scroll so rows appear above the hero bottom
-    if targetY < 108 then targetY = 108
+    if targetY < 72 then targetY = 72
     rowsGroup.translation = [0, targetY]
 end sub
 

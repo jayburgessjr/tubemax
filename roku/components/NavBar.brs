@@ -17,7 +17,7 @@ sub onActiveTabChange()
             if m.tabs[i] = activeTab
                 label.color = "0xFFFFFFFF"
                 label.font = "font:MediumBoldSystemFont"
-                activeBar.translation = [360 + m.tabOffsets[i], 68]
+                activeBar.translation = [380 + m.tabOffsets[i], 62]
                 activeBar.width = m.tabWidths[i]
             else
                 label.color = "0x808080FF"
