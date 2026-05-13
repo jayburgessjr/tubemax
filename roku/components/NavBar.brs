@@ -2,8 +2,8 @@
 
 sub init()
     m.tabs       = ["Home", "Search", "Trending", "Watchlist"]
-    m.tabOffsets = [0, 150, 300, 470]
-    m.tabWidths  = [50, 60, 74, 80]
+    m.tabOffsets = [0, 160, 320, 500]
+    m.tabWidths  = [46, 60, 74, 80]
 end sub
 
 sub onActiveTabChange()
@@ -17,10 +17,10 @@ sub onActiveTabChange()
             if m.tabs[i] = activeTab
                 label.color = "0xFFFFFFFF"
                 label.font = "font:MediumBoldSystemFont"
-                activeBar.translation = [380 + m.tabOffsets[i], 62]
+                activeBar.translation = [380 + m.tabOffsets[i], 74]
                 activeBar.width = m.tabWidths[i]
             else
-                label.color = "0x808080FF"
+                label.color = "0xB3B3B3FF"
                 label.font = "font:MediumSystemFont"
             end if
         end if

@@ -4,60 +4,54 @@
   <script type="text/brightscript" uri="pkg:/components/HeroBanner.brs" />
 
   <interface>
-    <field id="apiKey"        type="string"  value="" onChange="onApiKeySet" />
+    <field id="apiKey"        type="string"     value="" onChange="onApiKeySet" />
     <field id="videoSelected" type="assocarray" />
-    <field id="focused"       type="boolean" value="false" onChange="onFocusedChanged" />
+    <field id="focused"       type="boolean"    value="false" onChange="onFocusedChanged" />
   </interface>
 
   <children>
 
-    <!-- Hero Backdrop — full brightness -->
+    <!-- Full-screen hero backdrop -->
     <Poster
       id="heroThumb"
       width="1920"
-      height="430"
-      scaleRotateCenter="[960, 215]"
-      blendColor="0xFFFFFFFF"
+      height="1080"
       loadDisplayMode="scaleToZoom"
+      blendColor="0xCCCCCCFF"
     />
 
-    <!-- Bottom fade: stacked semi-transparent rects simulate gradient -->
-    <Rectangle width="1920" height="80"  color="0x14141400" translation="[0, 200]" />
-    <Rectangle width="1920" height="80"  color="0x14141466" translation="[0, 280]" />
-    <Rectangle width="1920" height="70"  color="0x141414BB" translation="[0, 360]" />
-    <Rectangle width="1920" height="80"  color="0x141414FF" translation="[0, 395]" />
+    <!-- Right-side darkening — keeps left content readable -->
+    <Rectangle width="960" height="1080" color="0x00000044" translation="[960, 0]" />
 
-    <!-- Left fade: layered for depth -->
-    <Rectangle width="500" height="430" color="0x141414EE" translation="[0,   0]" />
-    <Rectangle width="300" height="430" color="0x14141499" translation="[500, 0]" />
-    <Rectangle width="200" height="430" color="0x14141444" translation="[800, 0]" />
+    <!-- Left gradient — strong, like Netflix -->
+    <Rectangle width="700" height="1080" color="0x000000EE" translation="[0,   0]" />
+    <Rectangle width="400" height="1080" color="0x000000AA" translation="[700, 0]" />
+    <Rectangle width="300" height="1080" color="0x00000066" translation="[1100, 0]" />
 
-    <!-- Hero Content -->
-    <Group id="heroContent" translation="[80, 80]">
+    <!-- Bottom gradient — rows area blends in from here -->
+    <Rectangle width="1920" height="120" color="0x00000000" translation="[0, 440]" />
+    <Rectangle width="1920" height="120" color="0x00000066" translation="[0, 560]" />
+    <Rectangle width="1920" height="120" color="0x000000CC" translation="[0, 680]" />
+    <Rectangle width="1920" height="160" color="0x000000FF" translation="[0, 800]" />
 
-      <!-- Genre Badge -->
-      <Rectangle
-        id="genreBadge"
-        color="0xE50914FF"
-        width="120"
-        height="32"
-        cornerRadius="4"
-        translation="[0, 0]"
-      />
+    <!-- Hero Content — lower-left, Netflix style -->
+    <Group id="heroContent" translation="[80, 340]">
+
+      <!-- Series label -->
       <Label
-        id="genreLabel"
+        id="seriesLabel"
         text="FEATURED"
-        translation="[10, 6]"
-        color="0xFFFFFFFF"
+        translation="[2, 0]"
+        color="0xB3B3B3FF"
         font="font:SmallBoldSystemFont"
       />
 
-      <!-- Title -->
+      <!-- Large title -->
       <Label
         id="heroTitle"
         text="Loading..."
-        translation="[0, 50]"
-        width="700"
+        translation="[0, 38]"
+        width="780"
         wrap="true"
         color="0xFFFFFFFF"
         font="font:LargeBoldSystemFont"
@@ -67,46 +61,42 @@
       <Label
         id="heroDesc"
         text=""
-        translation="[0, 160]"
-        width="600"
+        translation="[0, 200]"
+        width="620"
         wrap="true"
-        color="0xB3B3B3FF"
+        color="0xE5E5E5FF"
         font="font:SmallSystemFont"
       />
 
-      <!-- Buttons Row -->
-      <Group id="btnGroup" translation="[0, 260]">
+      <!-- Buttons -->
+      <Group id="btnGroup" translation="[0, 310]">
 
-        <!-- Play Button -->
+        <!-- Play — white solid -->
         <Rectangle
           id="playBtn"
-          width="160"
-          height="52"
+          width="170" height="54"
           color="0xFFFFFFFF"
-          cornerRadius="6"
+          cornerRadius="4"
           translation="[0, 0]"
         />
         <Label
-          id="playBtnLabel"
-          text="Play"
-          translation="[50, 14]"
+          text="▶  Play"
+          translation="[28, 15]"
           color="0x141414FF"
           font="font:MediumBoldSystemFont"
         />
 
-        <!-- More Info Button -->
+        <!-- My List — semi-transparent -->
         <Rectangle
           id="infoBtn"
-          width="190"
-          height="52"
-          color="0x4D4D4DAA"
-          cornerRadius="6"
-          translation="[176, 0]"
+          width="170" height="54"
+          color="0x808080AA"
+          cornerRadius="4"
+          translation="[186, 0]"
         />
         <Label
-          id="infoBtnLabel"
-          text="More Info"
-          translation="[216, 14]"
+          text="+ My List"
+          translation="[206, 15]"
           color="0xFFFFFFFF"
           font="font:MediumBoldSystemFont"
         />

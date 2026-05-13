@@ -24,27 +24,37 @@ end sub
 sub buildHomeScreen()
     m.homeScreen.removeChildrenIndex(0, m.homeScreen.getChildCount())
 
-    ' Nav Bar (visual chrome only)
-    nav = createObject("roSGNode", "NavBar")
-    nav.id = "navBar"
-    nav.activeTab = "Home"
-    m.homeScreen.appendChild(nav)
-
-    ' Hero Banner
+    ' Hero Banner — full screen backdrop, appended FIRST (bottom layer)
     hero = createObject("roSGNode", "HeroBanner")
     hero.id = "heroBanner"
-    hero.translation = [0, 72]
+    hero.translation = [0, 0]
     hero.apiKey = m.apiKey
     hero.observeField("videoSelected", "onHeroVideoSelected")
     m.homeScreen.appendChild(hero)
 
+    ' Dark background behind rows area
+    rowsBg = createObject("roSGNode", "Rectangle")
+    rowsBg.id = "rowsBg"
+    rowsBg.width = 1920
+    rowsBg.height = 500
+    rowsBg.color = "0x0A0A0AFF"
+    rowsBg.translation = [0, 660]
+    m.homeScreen.appendChild(rowsBg)
+
     ' Content Rows Container
     rowsGroup = createObject("roSGNode", "Group")
     rowsGroup.id = "rowsGroup"
-    rowsGroup.translation = [0, 510]
+    rowsGroup.translation = [0, 680]
     m.homeScreen.appendChild(rowsGroup)
 
     buildContentRows(rowsGroup)
+
+    ' Nav Bar — appended LAST so it renders on top of hero
+    nav = createObject("roSGNode", "NavBar")
+    nav.id = "navBar"
+    nav.activeTab = "Home"
+    nav.translation = [0, 0]
+    m.homeScreen.appendChild(nav)
 
     ' Give initial focus to the hero
     focusHero()
@@ -75,7 +85,7 @@ sub buildContentRows(parent as object)
         row.apiKey = m.apiKey
         row.observeField("videoSelected", "onRowVideoSelected")
         parent.appendChild(row)
-        yOffset += 250
+        yOffset += 360
     end for
 end sub
 
@@ -117,7 +127,7 @@ sub focusHero()
 
     ' Scroll rows back to default position
     rowsGroup = m.homeScreen.findNode("rowsGroup")
-    if rowsGroup <> invalid then rowsGroup.translation = [0, 510]
+    if rowsGroup <> invalid then rowsGroup.translation = [0, 680]
 end sub
 
 sub focusRow(index as integer)
@@ -148,15 +158,14 @@ sub focusRow(index as integer)
     row.setFocus(true)
 
     ' Scroll rowsGroup so focused row is on screen
-    ' Rows area starts at y=510; each row is 250px; screen height=1080
-    ' Keep focused row top between y=510 and y=800
-    scrollOffset = index * 250
-    targetY = 510
+    ' Rows start at y=680; each row is 360px; never scroll above navbar (y=80)
+    scrollOffset = index * 360
+    targetY = 680
     if scrollOffset > 200
-        targetY = 510 - (scrollOffset - 200)
+        targetY = 680 - (scrollOffset - 200)
     end if
-    ' Never scroll so rows appear above the hero bottom
-    if targetY < 72 then targetY = 72
+    ' Never scroll rows above the navbar
+    if targetY < 80 then targetY = 80
     rowsGroup.translation = [0, targetY]
 end sub
 

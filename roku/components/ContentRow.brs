@@ -1,11 +1,11 @@
 ' ContentRow.brs
 
 sub init()
-    m.videos      = []
-    m.focusIndex  = 0
-    m.cardWidth   = 300
-    m.cardGap     = 16
-    m.visibleCards = 5
+    m.videos       = []
+    m.focusIndex   = 0
+    m.cardWidth    = 210
+    m.cardHeight   = 290
+    m.cardGap      = 12
     m.scrollOffset = 0
 end sub
 
@@ -28,7 +28,7 @@ sub fetchVideos()
         m.task.params = {
             part: "snippet",
             chart: "mostPopular",
-            maxResults: "12",
+            maxResults: "20",
             regionCode: "US"
         }
     else
@@ -37,7 +37,7 @@ sub fetchVideos()
             part: "snippet",
             q: m.top.queryString,
             type: "video",
-            maxResults: "12",
+            maxResults: "20",
             order: "relevance",
             videoDuration: "medium"
         }
@@ -94,7 +94,6 @@ end sub
 sub renderCards()
     cardsGroup = m.top.findNode("cardsGroup")
     if cardsGroup = invalid then return
-
     cardsGroup.removeChildrenIndex(0, cardsGroup.getChildCount())
 
     xPos = 0
@@ -110,65 +109,55 @@ function buildCard(data as object, index as integer, xPos as integer) as object
     card.id = "card_" + index.toStr()
     card.translation = [xPos, 0]
 
-    ' Focus border — appended FIRST so it renders behind thumbnail
+    ' Focus border — rendered first (behind everything)
     border = createObject("roSGNode", "Rectangle")
     border.id = "focusBorder"
-    border.width = m.cardWidth + 8
-    border.height = 177
+    border.width  = m.cardWidth + 8
+    border.height = m.cardHeight + 8
     border.translation = [-4, -4]
     border.color = "0xE50914FF"
-    border.cornerRadius = 9
+    border.cornerRadius = 8
     border.visible = false
     card.appendChild(border)
 
-    ' Thumbnail background
+    ' Card background
     bg = createObject("roSGNode", "Rectangle")
     bg.id = "cardBg"
-    bg.width = m.cardWidth
-    bg.height = 169
-    bg.color = "0x1E1E1EFF"
+    bg.width  = m.cardWidth
+    bg.height = m.cardHeight
+    bg.color  = "0x1A1A1AFF"
     bg.cornerRadius = 6
     card.appendChild(bg)
 
-    ' Thumbnail image
+    ' Thumbnail — scaleToZoom crops landscape 16:9 to portrait (like a poster)
     if data.thumb <> "" and data.thumb <> invalid
         poster = createObject("roSGNode", "Poster")
         poster.id = "cardPoster"
         poster.uri = data.thumb
-        poster.width = m.cardWidth
-        poster.height = 169
+        poster.width  = m.cardWidth
+        poster.height = m.cardHeight
         poster.loadDisplayMode = "scaleToZoom"
         card.appendChild(poster)
     end if
 
-    ' Bottom title scrim — subtle dark gradient at card bottom
+    ' Bottom scrim — title sits on top of this
     scrim = createObject("roSGNode", "Rectangle")
-    scrim.width = m.cardWidth
-    scrim.height = 60
-    scrim.translation = [0, 109]
-    scrim.color = "0x000000BB"
+    scrim.width  = m.cardWidth
+    scrim.height = 90
+    scrim.translation = [0, m.cardHeight - 90]
+    scrim.color = "0x000000CC"
     card.appendChild(scrim)
 
-    ' Title label
+    ' Title label — inside the card at bottom
     titleLabel = createObject("roSGNode", "Label")
     titleLabel.id = "cardTitle"
     titleLabel.text = data.title
-    titleLabel.translation = [0, 175]
-    titleLabel.width = m.cardWidth
+    titleLabel.translation = [8, m.cardHeight - 80]
+    titleLabel.width = m.cardWidth - 16
     titleLabel.wrap = true
-    titleLabel.color = "0xE5E5E5FF"
+    titleLabel.color = "0xFFFFFFFF"
     titleLabel.font = "font:SmallSystemFont"
     card.appendChild(titleLabel)
-
-    ' Channel label
-    chanLabel = createObject("roSGNode", "Label")
-    chanLabel.id = "cardChannel"
-    chanLabel.text = data.channel
-    chanLabel.translation = [0, 201]
-    chanLabel.width = m.cardWidth
-    chanLabel.color = "0x808080FF"
-    chanLabel.font = "font:SmallSystemFont"
-    card.appendChild(chanLabel)
 
     return card
 end function
@@ -181,17 +170,7 @@ sub updateFocusVisuals()
         card = cardsGroup.getChild(i)
         if card <> invalid
             border = card.findNode("focusBorder")
-            bg     = card.findNode("cardBg")
-            if border <> invalid
-                border.visible = (i = m.focusIndex)
-            end if
-            if bg <> invalid
-                if i = m.focusIndex
-                    bg.color = "0x2A2A2AFF"
-                else
-                    bg.color = "0x1E1E1EFF"
-                end if
-            end if
+            if border <> invalid then border.visible = (i = m.focusIndex)
         end if
     end for
 end sub
@@ -199,24 +178,19 @@ end sub
 sub scrollToFocus()
     cardsGroup = m.top.findNode("cardsGroup")
     if cardsGroup = invalid then return
-
-    ' Calculate scroll so focused card is visible
     targetX = -(m.focusIndex * (m.cardWidth + m.cardGap))
-    ' Keep first card from going too far right
     if targetX > 0 then targetX = 0
     cardsGroup.translation = [targetX, 0]
 end sub
 
 sub onFocusedChanged()
     if m.top.focused
-        ' Row just gained focus — reset to first card and show visuals
-        m.focusIndex   = 0
+        m.focusIndex = 0
         m.scrollOffset = 0
         cardsGroup = m.top.findNode("cardsGroup")
         if cardsGroup <> invalid then cardsGroup.translation = [0, 0]
         updateFocusVisuals()
     else
-        ' Row lost focus — hide all focus borders
         cardsGroup = m.top.findNode("cardsGroup")
         if cardsGroup = invalid then return
         for i = 0 to cardsGroup.getChildCount() - 1
@@ -224,8 +198,6 @@ sub onFocusedChanged()
             if card <> invalid
                 border = card.findNode("focusBorder")
                 if border <> invalid then border.visible = false
-                bg = card.findNode("cardBg")
-                if bg <> invalid then bg.color = "0x1E1E1EFF"
             end if
         end for
     end if
@@ -249,7 +221,7 @@ function onKeyEvent(key as string, press as boolean) as boolean
             updateFocusVisuals()
             scrollToFocus()
         else
-            return false ' Let parent handle (go to nav)
+            return false
         end if
         return true
     end if

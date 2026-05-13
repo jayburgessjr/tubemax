@@ -9,19 +9,20 @@
 
   <children>
 
-    <!-- Background -->
-    <Rectangle id="navBg" width="1920" height="72" color="0x080808FF" />
-    <!-- Bottom border -->
-    <Rectangle width="1920" height="1" color="0x1F1F1FFF" translation="[0, 71]" />
+    <!-- Gradient background: solid black at top, fades to transparent -->
+    <Rectangle width="1920" height="22" color="0x000000FF" translation="[0,  0]" />
+    <Rectangle width="1920" height="22" color="0x000000EE" translation="[0, 22]" />
+    <Rectangle width="1920" height="20" color="0x000000AA" translation="[0, 44]" />
+    <Rectangle width="1920" height="16" color="0x00000055" translation="[0, 64]" />
 
-    <!-- TM Logo Mark (red badge) -->
+    <!-- TM Logo Mark -->
     <Rectangle
-      width="44" height="30" color="0xE50914FF"
-      cornerRadius="4" translation="[24, 21]"
+      width="40" height="28" color="0xE50914FF"
+      cornerRadius="4" translation="[48, 26]"
     />
     <Label
       text="TM"
-      translation="[30, 24]"
+      translation="[53, 29]"
       color="0xFFFFFFFF"
       font="font:SmallBoldSystemFont"
     />
@@ -29,17 +30,17 @@
     <!-- App name -->
     <Label
       text="TUBEMAX"
-      translation="[78, 22]"
+      translation="[100, 24]"
       color="0xFFFFFFFF"
       font="font:MediumBoldSystemFont"
     />
 
     <!-- Tab labels -->
-    <Group id="navItems" translation="[380, 24]">
+    <Group id="navItems" translation="[380, 26]">
       <Label id="tab_Home"      text="Home"      translation="[0,   0]" color="0xFFFFFFFF" font="font:MediumBoldSystemFont" />
-      <Label id="tab_Search"    text="Search"    translation="[150, 0]" color="0x808080FF" font="font:MediumSystemFont" />
-      <Label id="tab_Trending"  text="Trending"  translation="[300, 0]" color="0x808080FF" font="font:MediumSystemFont" />
-      <Label id="tab_Watchlist" text="Watchlist" translation="[470, 0]" color="0x808080FF" font="font:MediumSystemFont" />
+      <Label id="tab_Search"    text="Search"    translation="[160, 0]" color="0xB3B3B3FF" font="font:MediumSystemFont" />
+      <Label id="tab_Trending"  text="Trending"  translation="[320, 0]" color="0xB3B3B3FF" font="font:MediumSystemFont" />
+      <Label id="tab_Watchlist" text="Watchlist" translation="[500, 0]" color="0xB3B3B3FF" font="font:MediumSystemFont" />
     </Group>
 
     <!-- Active tab underline -->
@@ -48,7 +49,7 @@
       width="46" height="3"
       color="0xE50914FF"
       cornerRadius="2"
-      translation="[380, 62]"
+      translation="[380, 74]"
     />
 
   </children>
