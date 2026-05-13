@@ -9,7 +9,7 @@
     <field id="queryType"     type="string"     value="search" />
     <field id="apiKey"        type="string"     value=""  onChange="onApiKeySet" />
     <field id="videoSelected" type="assocarray" />
-    <field id="hasFocus"      type="boolean"    value="false" onChange="onFocusChange" />
+    <field id="focused"       type="boolean"    value="false" onChange="onFocusedChanged" />
   </interface>
 
   <children>

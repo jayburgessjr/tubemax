@@ -31,7 +31,6 @@ sub buildKeyboard()
         for col = 0 to keys.count() - 1
             keyLabel = keys[col]
             if keyLabel = "" then
-                col++
                 continue for
             end if
 

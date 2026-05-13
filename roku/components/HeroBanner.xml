@@ -6,6 +6,7 @@
   <interface>
     <field id="apiKey"        type="string"  value="" onChange="onApiKeySet" />
     <field id="videoSelected" type="assocarray" />
+    <field id="focused"       type="boolean" value="false" onChange="onFocusedChanged" />
   </interface>
 
   <children>

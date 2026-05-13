@@ -1,15 +1,28 @@
 ' HeroBanner.brs
 
 sub init()
-    m.heroData = []
+    m.heroData     = []
     m.currentIndex = 0
-    m.focusedBtn = "play" ' "play" or "info"
+    m.focusedBtn   = "play" ' "play" or "info"
 
     ' Auto-rotate timer
     m.rotateTimer = createObject("roSGNode", "Timer")
     m.rotateTimer.duration = 8
-    m.rotateTimer.repeat = true
+    m.rotateTimer.repeat   = true
     m.rotateTimer.observeField("fire", "onRotate")
+end sub
+
+sub onFocusedChanged()
+    if m.top.focused
+        ' Show play button as focused when hero gains focus
+        highlightBtn(m.focusedBtn)
+    else
+        ' Dim both buttons when hero loses focus
+        playBtn = m.top.findNode("playBtn")
+        infoBtn = m.top.findNode("infoBtn")
+        if playBtn <> invalid then playBtn.color = "0xFFFFFFAA"
+        if infoBtn <> invalid then infoBtn.color = "0x4D4D4D66"
+    end if
 end sub
 
 sub onApiKeySet()

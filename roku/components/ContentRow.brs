@@ -207,9 +207,27 @@ sub scrollToFocus()
     cardsGroup.translation = [targetX, 0]
 end sub
 
-sub onFocusChange()
-    if m.top.hasFocus
+sub onFocusedChanged()
+    if m.top.focused
+        ' Row just gained focus — reset to first card and show visuals
+        m.focusIndex   = 0
+        m.scrollOffset = 0
+        cardsGroup = m.top.findNode("cardsGroup")
+        if cardsGroup <> invalid then cardsGroup.translation = [0, 0]
         updateFocusVisuals()
+    else
+        ' Row lost focus — hide all focus borders
+        cardsGroup = m.top.findNode("cardsGroup")
+        if cardsGroup = invalid then return
+        for i = 0 to cardsGroup.getChildCount() - 1
+            card = cardsGroup.getChild(i)
+            if card <> invalid
+                border = card.findNode("focusBorder")
+                if border <> invalid then border.visible = false
+                bg = card.findNode("cardBg")
+                if bg <> invalid then bg.color = "0x2A2A2AFF"
+            end if
+        end for
     end if
 end sub
 
